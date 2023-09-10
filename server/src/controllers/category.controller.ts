@@ -1,0 +1,127 @@
+import { Request, Response } from "express";
+import { StatusCodes } from "../utils/constant.js";
+import categoryService from "../services/category.service.js";
+
+const getAll = async (req: Request, res: Response) => {
+    try {
+        const categories = await categoryService.getAllAsync();
+
+        res.status(StatusCodes.Ok200).send({ categories });
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
+            return;
+        }
+
+        res.status(StatusCodes.InternalServerError500);
+    }
+    return;
+};
+
+const getByName = async (
+    req: Request<{}, {}, {}, { name: string }>,
+    res: Response
+) => {
+    try {
+        const category = await categoryService.getByNameAsync(req.query.name);
+
+        res.status(StatusCodes.Ok200).send({ category });
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
+            return;
+        }
+
+        res.status(StatusCodes.InternalServerError500);
+    }
+    return;
+};
+
+const search = async (req: Request, res: Response) => {
+    try {
+        const { name, featured, deleted, visible, searchText } = req.query;
+
+        let queryObject = {};
+        if (name) queryObject = { ...queryObject, name };
+        if (featured) queryObject = { ...queryObject, featured };
+        if (deleted) queryObject = { ...queryObject, deleted };
+        if (visible) queryObject = { ...queryObject, visible };
+        if (searchText && typeof searchText === "string") {
+            queryObject = {
+                ...queryObject,
+                title: { $regex: new RegExp(searchText), $options: "i" },
+            };
+        }
+
+        const category = await categoryService.searchAsync(queryObject);
+
+        res.status(StatusCodes.Ok200).send({ category });
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
+            return;
+        }
+
+        res.status(StatusCodes.InternalServerError500);
+    }
+    return;
+};
+
+const add = async (req: Request, res: Response) => {
+    try {
+        const category = await categoryService.addAsync(req.body);
+
+        res.status(StatusCodes.Created201).send({ category });
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
+            return;
+        }
+
+        res.status(StatusCodes.InternalServerError500);
+    }
+    return;
+};
+
+const remove = async (req: Request, res: Response) => {
+    try {
+        const category = await categoryService.deleteAsync(req.params.id);
+
+        res.status(StatusCodes.Ok200).send({ category });
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
+            return;
+        }
+
+        res.status(StatusCodes.InternalServerError500);
+    }
+    return;
+};
+
+const update = async (req: Request, res: Response) => {
+    try {
+        const category = await categoryService.updateAsync(
+            req.params.id,
+            req.body
+        );
+
+        res.status(StatusCodes.Ok200).send({ category });
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
+            return;
+        }
+
+        res.status(StatusCodes.InternalServerError500);
+    }
+    return;
+};
+
+export { getAll, getByName, search, add, remove, update };

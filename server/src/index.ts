@@ -4,12 +4,20 @@ import cors from "cors";
 import morgan from "morgan";
 import { StatusCodes } from "./utils/constant.js";
 import connectDB from "./data/connectDB.js";
+import categoryRoute from "./routes/category.route.js";
+import productRoute from "./routes/product.route.js";
 
 const app = express();
 
+//! Middlewares
 app.use(cors());
 app.use(morgan("dev"));
 
+//! Routes
+app.use("/api/v1/category", categoryRoute);
+app.use("/api/v1/product", productRoute);
+
+//! NotFound Route
 app.get("/*", (req, res) => {
     return res
         .status(StatusCodes.NotFound404)
