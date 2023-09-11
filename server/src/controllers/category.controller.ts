@@ -8,13 +8,7 @@ const getAll = async (req: Request, res: Response) => {
 
         res.status(StatusCodes.Ok200).send({ categories });
     } catch (error) {
-        if (error instanceof Error) {
-            console.log(error.message);
-            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
-            return;
-        }
-
-        res.status(StatusCodes.InternalServerError500);
+        throw new Error((error as Error).message);
     }
     return;
 };
@@ -28,13 +22,7 @@ const getByName = async (
 
         res.status(StatusCodes.Ok200).send({ category });
     } catch (error) {
-        if (error instanceof Error) {
-            console.log(error.message);
-            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
-            return;
-        }
-
-        res.status(StatusCodes.InternalServerError500);
+        throw new Error((error as Error).message);
     }
     return;
 };
@@ -59,30 +47,19 @@ const search = async (req: Request, res: Response) => {
 
         res.status(StatusCodes.Ok200).send({ category });
     } catch (error) {
-        if (error instanceof Error) {
-            console.log(error.message);
-            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
-            return;
-        }
-
-        res.status(StatusCodes.InternalServerError500);
+        throw new Error((error as Error).message);
     }
     return;
 };
 
 const add = async (req: Request, res: Response) => {
     try {
+        console.log(req.body);
         const category = await categoryService.addAsync(req.body);
 
         res.status(StatusCodes.Created201).send({ category });
     } catch (error) {
-        if (error instanceof Error) {
-            console.log(error.message);
-            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
-            return;
-        }
-
-        res.status(StatusCodes.InternalServerError500);
+        throw new Error((error as Error).message);
     }
     return;
 };
@@ -93,13 +70,7 @@ const remove = async (req: Request, res: Response) => {
 
         res.status(StatusCodes.Ok200).send({ category });
     } catch (error) {
-        if (error instanceof Error) {
-            console.log(error.message);
-            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
-            return;
-        }
-
-        res.status(StatusCodes.InternalServerError500);
+        throw new Error((error as Error).message);
     }
     return;
 };
@@ -113,13 +84,7 @@ const update = async (req: Request, res: Response) => {
 
         res.status(StatusCodes.Ok200).send({ category });
     } catch (error) {
-        if (error instanceof Error) {
-            console.log(error.message);
-            res.status(StatusCodes.BadRequest400).send({ msg: error.message });
-            return;
-        }
-
-        res.status(StatusCodes.InternalServerError500);
+        throw new Error((error as Error).message);
     }
     return;
 };
