@@ -1,31 +1,31 @@
 import { Model } from "mongoose";
 
 interface IBaseService {
-    getAllAsync: () => Promise<any>;
-    getByIdAsync: (id: string) => Promise<any>;
-    addAsync: (request: unknown) => Promise<any>;
-    deleteAsync: (id: string) => Promise<any>;
+  getAllAsync: () => Promise<unknown>;
+  getByIdAsync: (id: string) => Promise<unknown>;
+  addAsync: (request: unknown) => Promise<unknown>;
+  deleteAsync: (id: string) => Promise<unknown>;
 }
 
-export class BaseService implements IBaseService {
-    constructor(protected readonly model: typeof Model) {}
+export class BaseService<T> implements IBaseService {
+  constructor(protected readonly model: typeof Model) {}
 
-    async getAllAsync() {
-        return await this.model.find();
-    }
+  async getAllAsync(): Promise<T[]> {
+    return await this.model.find();
+  }
 
-    async getByIdAsync(id: string) {
-        return await this.model.findById(id);
-    }
+  async getByIdAsync(id: string): Promise<T | null> {
+    return await this.model.findById(id);
+  }
 
-    async addAsync(request: unknown) {
-        const savedDocument = await this.model.create(request);
+  async addAsync(request: unknown): Promise<T> {
+    const savedDocument = await this.model.create(request);
 
-        await savedDocument.save();
-        return savedDocument;
-    }
+    await savedDocument.save();
+    return savedDocument;
+  }
 
-    async deleteAsync(id: string) {
-        return await this.model.findByIdAndDelete(id);
-    }
+  async deleteAsync(id: string): Promise<T | null> {
+    return await this.model.findByIdAndDelete(id);
+  }
 }

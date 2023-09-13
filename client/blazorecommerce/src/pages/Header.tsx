@@ -9,7 +9,10 @@ type Props = {};
 const Header = (props: Props) => {
   return (
     <div
-      style={{ height: "55px" }}
+      style={{
+        height: "65px",
+        borderBottom: "2px solid #ddd",
+      }}
       className="d-flex align-items-center gap-4 px-5 container-fluid"
     >
       <Brand />

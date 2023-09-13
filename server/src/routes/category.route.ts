@@ -1,7 +1,7 @@
-import express from "express";
+import express, { Router } from "express";
 import * as categoryController from "../controllers/category.controller.js";
 
-const categoryRoute = express();
+const categoryRoute: Router = express();
 
 categoryRoute.get("/", categoryController.getAll);
 categoryRoute.post("/", categoryController.add);

@@ -1,15 +1,20 @@
 import React from "react";
 import { BsCartCheck } from "react-icons/bs";
+import { Button } from "@radix-ui/themes";
 
 type Props = {};
 
 const Cart = (props: Props) => {
   return (
-    <button type="button" className="btn btn-outline-primary position-relative">
+    <Button variant="surface" className="position-relative" size={"3"}>
       <BsCartCheck />
-      <span className="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle" />
-      <span className="visually-hidden">New alerts</span>
-    </button>
+      <span
+        className="position-absolute p-1 bg-danger border border-light rounded-circle"
+        style={{ bottom: "22px", left: "30px" }}
+      >
+        <span className="visually-hidden">New alerts</span>
+      </span>
+    </Button>
   );
 };
 

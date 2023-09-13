@@ -1,18 +1,17 @@
 import React from "react";
 import { PiMagnifyingGlass } from "react-icons/pi";
+import { TextField } from "@radix-ui/themes";
 
 type Props = {};
 
 const Search = (props: Props) => {
   return (
-    <>
-      <div className="input-group">
-        <span className="input-group-text">
-          <PiMagnifyingGlass />
-        </span>
-        <input className="form-control" type="text" placeholder="Search..." />
-      </div>
-    </>
+    <TextField.Root size={"3"} style={{ width: "70%" }}>
+      <TextField.Slot>
+        <PiMagnifyingGlass />
+      </TextField.Slot>
+      <TextField.Input placeholder="Search the products…" variant="surface" />
+    </TextField.Root>
   );
 };
 

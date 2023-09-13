@@ -1,37 +1,37 @@
 import { BsFillPersonFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { DropdownMenu, Button } from "@radix-ui/themes";
 
 type Props = {};
 
 const UserButton = (props: Props) => {
   return (
-    <div className="btn-group">
-      <button
-        type="button"
-        className="btn btn-outline-primary dropdown-toggle"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <BsFillPersonFill />
-      </button>
-      <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-        {/* <li>
-          <Link className="dropdown-item" to={"/profile"}>
-            Profile
-          </Link>
-        </li> */}
-        <li>
-          <Link className="dropdown-item" to={"/login"}>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <Button variant="surface" size={"3"}>
+          <BsFillPersonFill />
+        </Button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content variant="soft">
+        {/* <DropdownMenu.Item>Profile</DropdownMenu.Item> */}
+        <DropdownMenu.Item>
+          <Link
+            to={"/login"}
+            style={{ textDecoration: "none", color: "rgb(28, 32, 36)" }}
+          >
             Login
           </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" to={"/register"}>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item>
+          <Link
+            to={"/register"}
+            style={{ textDecoration: "none", color: "rgb(28, 32, 36)" }}
+          >
             Register
           </Link>
-        </li>
-      </ul>
-    </div>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 };
 

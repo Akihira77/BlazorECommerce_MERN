@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Container, Button, TextField, Box, Text } from "@radix-ui/themes";
 
 type Props = {};
 
@@ -7,26 +8,28 @@ const Login = (props: Props) => {
   const [password, setPassword] = useState("");
 
   return (
-    <div className="pt-5 container">
+    <Container size={"1"} mt={"9"}>
       <form className="d-flex justify-content-center flex-column">
-        <legend className="text-center">Login</legend>
-        <div className="mb-3">
+        <Text size={"7"} className="text-center">
+          Login
+        </Text>
+        <Box className="mb-3">
           <label htmlFor="email" className="form-label">
             Email
           </label>
-          <input
+          <TextField.Input
             type="email"
             className="form-control"
             id="email"
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </div>
+        </Box>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
             Password
           </label>
-          <input
+          <TextField.Input
             type="password"
             className="form-control"
             id="password"
@@ -34,11 +37,11 @@ const Login = (props: Props) => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <Button type="submit" variant="classic">
           Submit
-        </button>
+        </Button>
       </form>
-    </div>
+    </Container>
   );
 };
 

@@ -1,24 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import { Flex, Avatar, Link, Button } from "@radix-ui/themes";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const Brand = (props: Props) => {
+  const navigate = useNavigate();
   return (
-    <Link
-      color="primary"
-      className="btn btn-outline-primary d-flex align-items-center gap-2 py-0"
-      style={{ transform: "rotate(-2deg)" }}
-      to={"/"}
+    <Button
+      style={{
+        transform: "rotate(-2deg)",
+        padding: "1.4rem 1rem",
+      }}
+      variant="surface"
+      onClick={() => navigate("/")}
     >
-      <img
-        src="https://res.cloudinary.com/duthytmqy/image/upload/v1682229266/bec-high-resolution-logo-color-on-transparent-background_mnb8ph.png"
-        alt="brand"
-        className=""
-        style={{ width: "40px" }}
-      />
-      <span>BlazorECommerce</span>
-    </Link>
+      <Flex gap="2" align={"center"}>
+        <Avatar
+          src="https://res.cloudinary.com/duthytmqy/image/upload/v1682229266/bec-high-resolution-logo-color-on-transparent-background_mnb8ph.png"
+          fallback="brand"
+        />
+        <span>BlazorECommerce</span>
+      </Flex>
+    </Button>
   );
 };
 
