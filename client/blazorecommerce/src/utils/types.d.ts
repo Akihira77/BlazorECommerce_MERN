@@ -17,3 +17,9 @@ export type CategoryType = {
   visible: boolean;
   deleted: boolean;
 };
+
+export type ProductTypesType = {
+  id: string;
+  name: string;
+  category: CategoryType;
+};

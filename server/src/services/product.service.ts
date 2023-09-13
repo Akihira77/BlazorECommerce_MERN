@@ -5,7 +5,7 @@ class ProductService extends BaseService<IProductModel> {
   async updateAsync(
     id: string,
     request: unknown
-  ): Promise<typeof this.model | null> {
+  ): Promise<IProductModel | null> {
     return await this.model.findByIdAndUpdate(id, { request }, { new: true });
   }
 }

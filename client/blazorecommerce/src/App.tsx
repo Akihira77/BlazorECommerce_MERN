@@ -8,6 +8,7 @@ import Body from "./pages/Body.tsx";
 import Category from "./pages/Category.tsx";
 import SidebarNav from "./pages/SidebarNav.tsx";
 import UserList from "./pages/UserList.tsx";
+import ProductType from "./pages/ProductType.tsx";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Routes>
             {/* <Route path="/" /> */}
             <Route path="/admin/category" element={<Category />} />
+            <Route path="/admin/product-type" element={<ProductType />} />
             <Route path="/user" element={<UserList />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

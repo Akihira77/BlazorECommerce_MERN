@@ -8,6 +8,7 @@ import connectDB from "./data/connectDB.js";
 import categoryRoute from "./routes/category.route.js";
 import productRoute from "./routes/product.route.js";
 import errorHandlerMiddleware from "./middlewares/error-handler.middleware.js";
+import productTypeRoute from "./routes/productType.route.js";
 
 const app: Application = express();
 
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 //! Routes
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/product", productRoute);
+app.use("/api/v1/product-type", productTypeRoute);
 
 //! Error Handler Middleware
 app.use(errorHandlerMiddleware);
