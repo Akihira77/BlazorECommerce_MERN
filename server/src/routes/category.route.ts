@@ -5,10 +5,9 @@ const categoryRoute: Router = express();
 
 categoryRoute.get("/", categoryController.getAll);
 categoryRoute.post("/", categoryController.add);
+categoryRoute.get("/search", categoryController.search);
 
 categoryRoute.delete("/:id", categoryController.remove);
 categoryRoute.put("/:id", categoryController.update);
-
-categoryRoute.get("/search", categoryController.search);
 
 export default categoryRoute;
