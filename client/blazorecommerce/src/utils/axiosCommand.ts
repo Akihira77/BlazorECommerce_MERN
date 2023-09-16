@@ -1,5 +1,5 @@
-import axios from "axios";
-import { ApiResponse } from "./types";
+import axios, { AxiosError } from "axios";
+import { ApiResponse, SuccessResponse } from "./types";
 import { StatusCodes } from "./constant.ts";
 
 const api_url = import.meta.env.VITE_API_URL;
@@ -21,25 +21,18 @@ const getFromApi = async (url: string): Promise<ApiResponse> => {
 };
 
 const postToApi = async (url: string, data: object): Promise<ApiResponse> => {
-  let result: ApiResponse;
   try {
     const response = await axios.post(`${api_url}/${url}`, data);
 
-    if (response.status < StatusCodes.BadRequest400) {
-      result = {
-        data: response,
-        success: true,
-      };
-    } else {
-      result = {
-        msg: response.data,
-        statusCode: response.status,
-      };
-    }
+    const result: SuccessResponse = {
+      data: response,
+      success: true,
+    };
 
     return result;
   } catch (error) {
-    return errorCatch(error);
+    const msg = errorCatch(error);
+    return msg;
   }
 };
 
@@ -92,10 +85,17 @@ const putToApi = async (
 };
 
 const errorCatch = (error: unknown) => {
-  const result = {
+  let result: ApiResponse = {
     statusCode: StatusCodes.BadRequest400,
-    msg: (error as Error).message,
+    msg: "Something happened",
   };
+
+  if (error instanceof AxiosError) {
+    result = {
+      statusCode: error.response!.status,
+      msg: error.response?.data.msg,
+    };
+  }
 
   return result;
 };

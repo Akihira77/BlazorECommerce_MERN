@@ -6,14 +6,10 @@ type Props = {};
 
 const Cart = (props: Props) => {
   return (
-    <Button variant="surface" className="position-relative" size={"3"}>
+    <Button variant="surface" className="relative" size={"3"}>
       <BsCartCheck />
-      <span
-        className="position-absolute p-1 bg-danger border border-light rounded-circle"
-        style={{ bottom: "22px", left: "30px" }}
-      >
-        <span className="visually-hidden">New alerts</span>
-      </span>
+      <span className="sr-only">Notifications</span>
+      <div className="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 "></div>
     </Button>
   );
 };

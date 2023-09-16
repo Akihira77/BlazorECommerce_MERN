@@ -10,6 +10,7 @@ import productRoute from "./routes/product.route.js";
 import errorHandlerMiddleware from "./middlewares/error-handler.middleware.js";
 import productTypeRoute from "./routes/productType.route.js";
 import addressRoute from "./routes/address.route.js";
+import userRoute from "./routes/user.route.js";
 
 const app: Application = express();
 
@@ -28,6 +29,7 @@ app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/product-type", productTypeRoute);
 app.use("/api/v1/address", addressRoute);
+app.use("/api/v1/user", userRoute);
 
 //! Error Handler Middleware
 app.use(errorHandlerMiddleware);

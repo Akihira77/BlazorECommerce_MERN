@@ -17,67 +17,45 @@ const search = async (req: Request, res: Response): Promise<void> => {
 
     return objQuery;
   }
-  try {
-    const { street, city, country, state } = req.query;
+  const { street, city, country, state } = req.query;
 
-    let queryObject: Record<string, unknown> = {};
+  let queryObject: Record<string, unknown> = {};
 
-    if (street) queryObject = mapObject("street", street, queryObject);
-    if (city) queryObject = mapObject("city", city, queryObject);
-    if (country) queryObject = mapObject("country", country, queryObject);
-    if (state) queryObject = mapObject("state", state, queryObject);
+  if (street) queryObject = mapObject("street", street, queryObject);
+  if (city) queryObject = mapObject("city", city, queryObject);
+  if (country) queryObject = mapObject("country", country, queryObject);
+  if (state) queryObject = mapObject("state", state, queryObject);
 
-    const address = await addressService.searchAsync(queryObject);
+  const address = await addressService.searchAsync(queryObject);
 
-    res.status(StatusCodes.Ok200).send({ address });
-  } catch (error) {
-    throw new Error((error as Error).message);
-  }
+  res.status(StatusCodes.Ok200).send({ address });
+
   return;
 };
 
 const getById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const address = await addressService.getByIdAsync(req.params.id);
-
-    res.status(StatusCodes.Ok200).send({ address });
-  } catch (error) {
-    throw new Error((error as Error).message);
-  }
   return;
 };
 
 const add = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const address = await addressService.addAsync(req.body);
+  const address = await addressService.addAsync(req.body);
 
-    res.status(StatusCodes.Created201).send({ address });
-  } catch (error) {
-    throw new Error((error as Error).message);
-  }
+  res.status(StatusCodes.Created201).send({ address });
   return;
 };
 
 const remove = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const address = await addressService.deleteAsync(req.params.id);
+  const address = await addressService.deleteAsync(req.params.id);
 
-    res.status(StatusCodes.Ok200).send({ address });
-  } catch (error) {
-    throw new Error((error as Error).message);
-  }
+  res.status(StatusCodes.Ok200).send({ address });
   return;
 };
 
 const update = async (req: Request, res: Response): Promise<void> => {
-  try {
-    console.log(req.body);
-    const address = await addressService.updateAsync(req.params.id, req.body);
+  console.log(req.body);
+  const address = await addressService.updateAsync(req.params.id, req.body);
 
-    res.status(StatusCodes.Ok200).send({ address });
-  } catch (error) {
-    throw new Error((error as Error).message);
-  }
+  res.status(StatusCodes.Ok200).send({ address });
   return;
 };
 

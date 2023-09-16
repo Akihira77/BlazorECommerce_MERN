@@ -1,6 +1,6 @@
 import "./App.css";
 import Header from "./pages/Header.tsx";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./components/Header/Login.tsx";
 import Register from "./components/Header/Register.tsx";
 import { Section } from "@radix-ui/themes";
@@ -9,6 +9,8 @@ import Category from "./pages/Category.tsx";
 import SidebarNav from "./pages/SidebarNav.tsx";
 import UserList from "./pages/UserList.tsx";
 import ProductType from "./pages/ProductType.tsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -21,18 +23,21 @@ function App() {
 
         {/* Sidebar */}
         <Section p={"0"} style={{ display: "flex", gap: "20px" }}>
-          <SidebarNav />
           <Routes>
             {/* <Route path="/" /> */}
-            <Route path="/admin/category" element={<Category />} />
-            <Route path="/admin/product-type" element={<ProductType />} />
+            <Route path="admin" element={<SidebarNav />}>
+              {/* <Route index /> */}
+              <Route path="category" element={<Category />} />
+              <Route path="product-type" element={<ProductType />} />
+            </Route>
             <Route path="/user" element={<UserList />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>
-          <Outlet />
+          {/* <Outlet /> */}
         </Section>
       </main>
+      <ToastContainer />
     </>
   );
 }

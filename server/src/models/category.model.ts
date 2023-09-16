@@ -13,11 +13,13 @@ const categorySchema = new mongoose.Schema<ICategoryModel>(
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     url: {
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     visible: {
       type: Boolean,

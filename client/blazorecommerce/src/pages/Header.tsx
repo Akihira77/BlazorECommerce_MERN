@@ -8,16 +8,10 @@ type Props = {};
 
 const Header = (props: Props) => {
   return (
-    <div
-      style={{
-        height: "65px",
-        borderBottom: "2px solid #ddd",
-      }}
-      className="d-flex align-items-center gap-4 px-5 container-fluid"
-    >
+    <div className="flex items-center gap-4 px-8 py-2 h-[65px] border-b-2">
       <Brand />
       <Search />
-      <div className="d-flex gap-3 align-items-center">
+      <div className="flex gap-3 items-center">
         <Cart />
         <UserButton />
       </div>

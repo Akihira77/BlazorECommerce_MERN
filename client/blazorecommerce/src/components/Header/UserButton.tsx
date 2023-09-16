@@ -17,7 +17,12 @@ const UserButton = (props: Props) => {
         <DropdownMenu.Item>
           <Link
             to={"/login"}
-            style={{ textDecoration: "none", color: "rgb(28, 32, 36)" }}
+            style={{
+              textDecoration: "none",
+              color: "rgb(28, 32, 36)",
+              cursor: "pointer",
+            }}
+            reloadDocument
           >
             Login
           </Link>
@@ -25,7 +30,12 @@ const UserButton = (props: Props) => {
         <DropdownMenu.Item>
           <Link
             to={"/register"}
-            style={{ textDecoration: "none", color: "rgb(28, 32, 36)" }}
+            style={{
+              textDecoration: "none",
+              color: "rgb(28, 32, 36)",
+              cursor: "pointer",
+            }}
+            reloadDocument
           >
             Register
           </Link>

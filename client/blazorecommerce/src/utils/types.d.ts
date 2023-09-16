@@ -5,7 +5,7 @@ export type SuccessResponse = {
 
 export type ErrorResponse = {
   statusCode: number;
-  msg: string;
+  msg: any;
 };
 
 export type ApiResponse = SuccessResponse | ErrorResponse;
@@ -23,3 +23,5 @@ export type ProductTypesType = {
   name: string;
   category: CategoryType;
 };
+
+export type ToastType = "info" | "success" | "warning" | "error" | "default";

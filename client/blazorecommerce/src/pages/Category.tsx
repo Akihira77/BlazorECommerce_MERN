@@ -1,7 +1,5 @@
-import { Container, Table, Box } from "@radix-ui/themes";
+import { Container } from "@radix-ui/themes";
 import CreateCategory from "../components/Category/CreateCategory.tsx";
-import EditCategory from "../components/Category/EditCategory.tsx";
-import DeleteCategory from "../components/Category/DeleteCategory.tsx";
 import { useEffect, useState } from "react";
 import { getFromApi } from "../utils/axiosCommand.ts";
 import {
