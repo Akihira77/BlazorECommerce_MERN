@@ -1,37 +1,37 @@
-import { useEffect, useState } from "react";
-import { getFromApi } from "../utils/axiosCommand.ts";
-import {
-  SuccessResponse,
-  ErrorResponse,
-  ProductTypesType,
-} from "../utils/types.ts";
+import React from "react";
 import CreateProductType from "../components/ProductType/CreateProductType.tsx";
 import MainTable from "../components/ProductType/MainTable.tsx";
+import useGetFromApi from "../hooks/useGetFromApi.tsx";
+import { ResultType } from "../components/ProductType/type.ts";
+import { ProductTypesType } from "../utils/types";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 type Props = {};
 
 const ProductType = (props: Props) => {
-  const [productTypes, setProductTypes] = useState<ProductTypesType[]>();
-  const [flag, setFlag] = useState(false);
+  const [productTypes, setProductTypes] = React.useState<ProductTypesType[]>(
+    []
+  );
 
-  useEffect(() => {
-    async function callApi() {
-      const response = await getFromApi("product-type");
+  const data = useGetFromApi<ResultType>("product-type")?.productTypes;
 
-      if ("data" in response) {
-        setProductTypes((response as SuccessResponse).data.productTypes);
-      } else {
-        console.log((response as ErrorResponse).msg);
-      }
+  React.useEffect(() => {
+    if (data) {
+      setProductTypes(data);
     }
+  }, [data]);
 
-    callApi();
-  }, [flag]);
-
-  return (
+  return productTypes.length == 0 ? (
+    <div className="flex mx-auto items-center">
+      <ProgressSpinner />
+    </div>
+  ) : (
     <div className="pt-5 relative container mr-4">
-      <CreateProductType setFlag={setFlag} />
-      <MainTable productTypes={productTypes} setFlag={setFlag} />
+      <CreateProductType setProductTypes={setProductTypes} />
+      <MainTable
+        productTypes={productTypes}
+        setProductTypes={setProductTypes}
+      />
     </div>
   );
 };

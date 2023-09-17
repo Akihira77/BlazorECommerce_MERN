@@ -6,10 +6,10 @@ import DeleteProductType from "./DeleteProductType.tsx";
 
 type Props = {
   productTypes?: ProductTypesType[];
-  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  setProductTypes: React.Dispatch<React.SetStateAction<ProductTypesType[]>>;
 };
 
-const MainTable = ({ productTypes, setFlag }: Props) => {
+const MainTable = ({ productTypes, setProductTypes }: Props) => {
   return (
     <Table hoverable style={{ marginTop: "1rem" }}>
       <Table.Head>
@@ -35,14 +35,15 @@ const MainTable = ({ productTypes, setFlag }: Props) => {
                 <div>
                   <EditProductType
                     productTypeCategory={item.category.name}
-                    setFlag={setFlag}
+                    setProductTypes={setProductTypes}
                     productTypeId={item.id}
                     productTypeName={item.name}
                   />
                 </div>
                 <div>
                   <DeleteProductType
-                    setFlag={setFlag}
+                    productTypeCategory={item.category.name}
+                    setProductTypes={setProductTypes}
                     productTypeId={item.id}
                     productTypeName={item.name}
                   />

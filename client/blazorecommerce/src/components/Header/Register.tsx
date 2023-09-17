@@ -18,29 +18,13 @@ const Register = (props: Props) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const toast = useRef<Toast>(null);
   const navigate = useNavigate();
-  const show = (
-    text: string,
-    severity: "error" | "success" | "info" | "error",
-    summary: string
-  ) => {
+  const show = (text: string, severity: ToastType, summary: string) => {
     toast.current?.show({
       severity: severity,
       summary: summary,
       detail: text,
     });
   };
-  // const notify = (text: string, type: ToastType) =>
-  //   toast(text, {
-  //     position: "top-center",
-  //     autoClose: 3000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: false,
-  //     progress: undefined,
-  //     theme: "light",
-  //     type: type,
-  //   });
 
   async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>
@@ -61,12 +45,10 @@ const Register = (props: Props) => {
 
     console.log(response);
     if (response.statusCode == StatusCodes.BadRequest400) {
-      // notify(response.msg, "error");
       show(response.msg, "error", "Error");
       return;
     }
 
-    // notify("Registration success", "success");
     show("Registration success", "success", "Success");
     navigate("/login");
   }

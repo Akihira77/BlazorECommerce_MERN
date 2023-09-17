@@ -24,4 +24,11 @@ export type ProductTypesType = {
   category: CategoryType;
 };
 
-export type ToastType = "info" | "success" | "warning" | "error" | "default";
+export type ProductType = {
+  title: string;
+  featured: boolean;
+  visible: boolean;
+  deleted: boolean;
+};
+
+export type ToastType = "info" | "success" | "error" | "warn" | undefined;

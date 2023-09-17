@@ -1,49 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { Button, Modal, TextInput, Select } from "flowbite-react";
-import { getFromApi, postToApi } from "../../utils/axiosCommand.ts";
-import {
-  CategoryType,
-  ErrorResponse,
-  SuccessResponse,
-} from "../../utils/types";
+import React from "react";
+import { Button, Modal, TextInput } from "flowbite-react";
+import { postToApi } from "../../utils/axiosCommand.ts";
+import { CategoryType, ProductTypesType } from "../../utils/types";
 import { GrAdd } from "react-icons/gr";
 import {
   CascadeSelect,
   CascadeSelectChangeEvent,
 } from "primereact/cascadeselect";
+import useGetFromApi from "../../hooks/useGetFromApi.tsx";
+import { ResultType } from "../Category/type.ts";
 
 type Props = {
-  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  setProductTypes: React.Dispatch<React.SetStateAction<ProductTypesType[]>>;
 };
 
-const CreateProductType = ({ setFlag }: Props) => {
-  const [openModal, setOpenModal] = useState<string | undefined>();
-  const [name, setName] = useState("Book");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [categories, setCategories] = useState<CategoryType[]>();
+const CreateProductType = ({ setProductTypes }: Props) => {
+  const [openModal, setOpenModal] = React.useState<string | undefined>();
+  const [name, setName] = React.useState("Book");
+  const [selectedCategory, setSelectedCategory] =
+    React.useState<CategoryType | null>(null);
+  const [categories, setCategories] = React.useState<CategoryType[]>([]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    postToApi("product-type", { name, category: selectedCategory }).then(() => {
-      setOpenModal(undefined);
-      setFlag((prev) => !prev);
-    });
+    postToApi("product-type", { name, category: selectedCategory?.id }).then(
+      (response) => {
+        setProductTypes(response.data?.data.productTypes);
+        setOpenModal(undefined);
+      }
+    );
   }
 
-  useEffect(() => {
-    async function callApi() {
-      const response = await getFromApi("category");
+  const data = useGetFromApi<ResultType>("category")?.categories;
 
-      if ("data" in response) {
-        setCategories((response as SuccessResponse).data.categories);
-      } else {
-        console.log((response as ErrorResponse).msg);
-      }
+  React.useEffect(() => {
+    if (data) {
+      setCategories(data);
     }
-
-    callApi();
-  }, []);
+  }, [data]);
 
   return (
     <div className="relative" style={{ left: "81%" }}>
@@ -91,15 +86,6 @@ const CreateProductType = ({ setFlag }: Props) => {
               ></CascadeSelect>
               <label htmlFor="multiselect">Category</label>
             </span>
-
-            {/* <Select onChange={(e) => setSelectedCategory(e)}>
-              {categories &&
-                categories.map((category) => (
-                  <option value={category.id} key={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-            </Select> */}
 
             <div className="flex gap-3 mt-4 justify-end">
               <Modal.Footer>

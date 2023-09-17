@@ -53,26 +53,29 @@ const search = async (req: Request, res: Response): Promise<void> => {
 };
 
 const add = async (req: Request, res: Response): Promise<void> => {
-  const category = await categoryService.addAsync(req.body);
+  await categoryService.addAsync(req.body);
+  const categories = await categoryService.getAllAsync();
 
-  res.status(StatusCodes.Created201).send({ category });
+  res.status(StatusCodes.Created201).send({ categories });
 
   return;
 };
 
 const remove = async (req: Request, res: Response): Promise<void> => {
-  const category = await categoryService.deleteAsync(req.params.id);
+  await categoryService.deleteAsync(req.params.id);
+  const categories = await categoryService.getAllAsync();
 
-  res.status(StatusCodes.Ok200).send({ category });
+  res.status(StatusCodes.Ok200).send({ categories });
 
   return;
 };
 
 const update = async (req: Request, res: Response): Promise<void> => {
   console.log(req.body);
-  const category = await categoryService.updateAsync(req.params.id, req.body);
+  await categoryService.updateAsync(req.params.id, req.body);
+  const categories = await categoryService.getAllAsync();
 
-  res.status(StatusCodes.Ok200).send({ category });
+  res.status(StatusCodes.Ok200).send({ categories });
 
   return;
 };

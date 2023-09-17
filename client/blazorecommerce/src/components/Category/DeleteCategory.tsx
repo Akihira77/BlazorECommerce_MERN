@@ -2,28 +2,29 @@ import React, { useState } from "react";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { FiTrash } from "react-icons/fi";
 import { deleteToApi } from "../../utils/axiosCommand.ts";
+import { CategoryType } from "@/src/utils/types.js";
 
 type Props = {
   categoryId: string | null;
   categoryName: string | null;
   categoryUrl: string | null;
-  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  setCategories: React.Dispatch<React.SetStateAction<CategoryType[]>>;
 };
 
 const DeleteCategory = ({
   categoryId,
   categoryName,
   categoryUrl,
-  setFlag,
+  setCategories,
 }: Props) => {
   const [openModal, setOpenModal] = useState<string | undefined>();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    deleteToApi("category", categoryId!).then(() => {
+    deleteToApi("category", categoryId!).then((response) => {
+      setCategories(response.data?.data.categories);
       setOpenModal(undefined);
-      setFlag((prev) => !prev);
     });
   }
 

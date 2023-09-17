@@ -2,26 +2,29 @@ import React, { useState } from "react";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { FiTrash } from "react-icons/fi";
 import { deleteToApi } from "../../utils/axiosCommand.ts";
+import { ProductTypesType } from "@/src/utils/types.js";
 
 type Props = {
   productTypeId: string | null;
   productTypeName: string | null;
-  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  productTypeCategory: string | null;
+  setProductTypes: React.Dispatch<React.SetStateAction<ProductTypesType[]>>;
 };
 
 const DeleteProductType = ({
   productTypeId,
   productTypeName,
-  setFlag,
+  productTypeCategory,
+  setProductTypes,
 }: Props) => {
   const [openModal, setOpenModal] = useState<string | undefined>();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    deleteToApi("product-type", productTypeId!).then(() => {
+    deleteToApi("product-type", productTypeId!).then((response) => {
       setOpenModal(undefined);
-      setFlag((prev) => !prev);
+      setProductTypes(response.data?.data.productTypes);
     });
   }
 
@@ -49,6 +52,14 @@ const DeleteProductType = ({
             <TextInput
               defaultValue={productTypeName ?? ""}
               placeholder="category name"
+              disabled
+            />
+          </label>
+          <label>
+            <div className="mb-1 font-bold">Category</div>
+            <TextInput
+              defaultValue={productTypeCategory ?? ""}
+              placeholder="url for category"
               disabled
             />
           </label>

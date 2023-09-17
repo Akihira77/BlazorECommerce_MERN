@@ -6,10 +6,10 @@ import DeleteCategory from "./DeleteCategory.tsx";
 
 type Props = {
   categories?: CategoryType[];
-  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  setCategories: React.Dispatch<React.SetStateAction<CategoryType[]>>;
 };
 
-const MainTable = ({ categories, setFlag }: Props) => {
+const MainTable = ({ categories, setCategories }: Props) => {
   return (
     <Table hoverable style={{ marginTop: "1rem" }}>
       <Table.Head>
@@ -20,8 +20,8 @@ const MainTable = ({ categories, setFlag }: Props) => {
 
       <Table.Body className="divide-y">
         {categories &&
-          categories.map((item) => (
-            <Table.Row key={item.id}>
+          categories.map((item, index) => (
+            <Table.Row key={index}>
               <Table.Cell>{item.name}</Table.Cell>
               <Table.Cell>{item.url}</Table.Cell>
               <Table.Cell
@@ -34,7 +34,7 @@ const MainTable = ({ categories, setFlag }: Props) => {
               >
                 <div>
                   <EditCategory
-                    setFlag={setFlag}
+                    setCategories={setCategories}
                     categoryId={item.id}
                     categoryName={item.name}
                     categoryUrl={item.url}
@@ -42,7 +42,7 @@ const MainTable = ({ categories, setFlag }: Props) => {
                 </div>
                 <div>
                   <DeleteCategory
-                    setFlag={setFlag}
+                    setCategories={setCategories}
                     categoryId={item.id}
                     categoryName={item.name}
                     categoryUrl={item.url}

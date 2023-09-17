@@ -13,29 +13,13 @@ const Login = (props: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toast = useRef<Toast>(null);
-  const show = (
-    text: string,
-    severity: "error" | "success" | "info" | "error",
-    summary: string
-  ) => {
+  const show = (text: string, severity: ToastType, summary: string) => {
     toast.current?.show({
       severity: severity,
       summary: summary,
       detail: text,
     });
   };
-  // const notify = (text: string, type: ToastType) =>
-  //   toast(text, {
-  //     position: "top-center",
-  //     autoClose: 3000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: false,
-  //     progress: undefined,
-  //     theme: "light",
-  //     type: type,
-  //   });
 
   async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>
@@ -55,7 +39,6 @@ const Login = (props: Props) => {
 
     localStorage.setItem("token", response.data.data.token);
     show("Welcome", "success", "Success");
-    // notify("Welcome", "success");
   }
 
   return (

@@ -2,22 +2,23 @@ import React, { useState } from "react";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { postToApi } from "../../utils/axiosCommand.ts";
 import { GrAdd } from "react-icons/gr";
+import { CategoryType } from "@/src/utils/types.js";
 
 type Props = {
-  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  setCategories: React.Dispatch<React.SetStateAction<CategoryType[]>>;
 };
 
-const CreateCategory = ({ setFlag }: Props) => {
-  const [openModal, setOpenModal] = useState<string | undefined>();
+const CreateCategory = ({ setCategories }: Props) => {
+  const [openModal, setOpenModal] = useState<string>();
   const [name, setName] = useState("Book");
   const [url, setUrl] = useState("books");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    postToApi("category", { name, url }).then(() => {
+    postToApi("category", { name, url }).then((response) => {
+      setCategories(response.data?.data.categories);
       setOpenModal(undefined);
-      setFlag((prev) => !prev);
     });
   }
 
@@ -52,6 +53,7 @@ const CreateCategory = ({ setFlag }: Props) => {
                 defaultValue={name}
                 placeholder="category name"
                 onChange={(e) => setName(e.target.value)}
+                autoFocus
               />
             </label>
             <label>

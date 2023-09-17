@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { BsPencilSquare } from "react-icons/bs";
 import { putToApi } from "../../utils/axiosCommand.ts";
+import { ProductTypesType } from "@/src/utils/types.js";
 
 type Props = {
   productTypeId: string | null;
   productTypeName: string | null;
   productTypeCategory: string | null;
-  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  setProductTypes: React.Dispatch<React.SetStateAction<ProductTypesType[]>>;
 };
 const EditProductType = ({
   productTypeId,
   productTypeName,
   productTypeCategory,
-  setFlag,
+  setProductTypes,
 }: Props) => {
   const [openModal, setOpenModal] = useState<string | undefined>();
   const [name, setName] = useState(productTypeName);
@@ -23,9 +24,9 @@ const EditProductType = ({
     setOpenModal("true");
     console.log(name);
 
-    putToApi("product-type", productTypeId!, { name }).then(() => {
+    putToApi("product-type", productTypeId!, { name }).then((response) => {
       setOpenModal(undefined);
-      setFlag((prev) => !prev);
+      setProductTypes(response.data?.data.productTypes);
     });
   }
 

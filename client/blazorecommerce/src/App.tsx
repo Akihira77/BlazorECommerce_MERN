@@ -8,6 +8,7 @@ import Category from "./pages/Category.tsx";
 import SidebarNav from "./pages/SidebarNav.tsx";
 import UserList from "./pages/UserList.tsx";
 import ProductType from "./pages/ProductType.tsx";
+import Product from "./pages/Product.tsx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               {/* <Route index /> */}
               <Route path="category" element={<Category />} />
               <Route path="product-type" element={<ProductType />} />
+              <Route path="product" element={<Product />} />
             </Route>
             <Route path="/user" element={<UserList />} />
             <Route path="/login" element={<Login />} />

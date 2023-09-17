@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { BsPencilSquare } from "react-icons/bs";
 import { putToApi } from "../../utils/axiosCommand.ts";
+import { CategoryType } from "@/src/utils/types.js";
 
 type Props = {
   categoryId: string | null;
   categoryName: string | null;
   categoryUrl: string | null;
-  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  setCategories: React.Dispatch<React.SetStateAction<CategoryType[]>>;
 };
 const EditCategory = ({
   categoryId,
   categoryName,
   categoryUrl,
-  setFlag,
+  setCategories,
 }: Props) => {
   const [openModal, setOpenModal] = useState<string | undefined>();
 
@@ -25,9 +26,9 @@ const EditCategory = ({
     setOpenModal("default");
     console.log(name, url);
 
-    putToApi("category", categoryId!, { name, url }).then(() => {
+    putToApi("category", categoryId!, { name, url }).then((response) => {
+      setCategories(response.data?.data.categories);
       setOpenModal(undefined);
-      setFlag((prev) => !prev);
     });
   }
 

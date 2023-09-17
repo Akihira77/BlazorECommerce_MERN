@@ -1,37 +1,31 @@
+import React from "react";
 import CreateCategory from "../components/Category/CreateCategory.tsx";
-import { useEffect, useState } from "react";
-import { getFromApi } from "../utils/axiosCommand.ts";
-import {
-  SuccessResponse,
-  ErrorResponse,
-  CategoryType,
-} from "../utils/types.ts";
 import MainTable from "../components/Category/MainTable.tsx";
+import useGetFromApi from "../hooks/useGetFromApi.tsx";
+import { ResultType } from "../components/Category/type.ts";
+import { CategoryType } from "../utils/types";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 type Props = {};
 
 const Category = (props: Props) => {
-  const [categories, setCategories] = useState<CategoryType[]>();
-  const [flag, setFlag] = useState(false);
+  const data = useGetFromApi<ResultType>("category")?.categories;
+  const [categories, setCategories] = React.useState<CategoryType[]>([]);
 
-  useEffect(() => {
-    async function callApi() {
-      const response = await getFromApi("category");
-
-      if ("data" in response) {
-        setCategories((response as SuccessResponse).data.categories);
-      } else {
-        console.log((response as ErrorResponse).msg);
-      }
+  React.useEffect(() => {
+    if (data) {
+      setCategories(data);
     }
+  }, [data]);
 
-    callApi();
-  }, [flag]);
-
-  return (
+  return categories.length == 0 ? (
+    <div className="flex mx-auto items-center">
+      <ProgressSpinner />
+    </div>
+  ) : (
     <div className="pt-5 relative container mr-4">
-      <CreateCategory setFlag={setFlag} />
-      <MainTable setFlag={setFlag} categories={categories} />
+      <CreateCategory setCategories={setCategories} />
+      <MainTable setCategories={setCategories} categories={categories} />
     </div>
   );
 };
