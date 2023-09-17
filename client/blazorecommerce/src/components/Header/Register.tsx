@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Container, Button, Text, Flex } from "@radix-ui/themes";
+import React, { useRef, useState } from "react";
+import { Button } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import { postToApi } from "../../utils/axiosCommand.ts";
-import * as Form from "@radix-ui/react-form";
 import Input from "../Input.tsx";
 import { toast } from "react-toastify";
 import { StatusCodes } from "../../utils/constant.ts";
 import { ToastType } from "../../utils/types";
+import { Toast } from "primereact/toast";
 
 type Props = {};
 
@@ -16,19 +16,31 @@ const Register = (props: Props) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const toast = useRef<Toast>(null);
   const navigate = useNavigate();
-  const notify = (text: string, type: ToastType) =>
-    toast(text, {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
-      type: type,
+  const show = (
+    text: string,
+    severity: "error" | "success" | "info" | "error",
+    summary: string
+  ) => {
+    toast.current?.show({
+      severity: severity,
+      summary: summary,
+      detail: text,
     });
+  };
+  // const notify = (text: string, type: ToastType) =>
+  //   toast(text, {
+  //     position: "top-center",
+  //     autoClose: 3000,
+  //     hideProgressBar: false,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //     draggable: false,
+  //     progress: undefined,
+  //     theme: "light",
+  //     type: type,
+  //   });
 
   async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>
@@ -49,26 +61,25 @@ const Register = (props: Props) => {
 
     console.log(response);
     if (response.statusCode == StatusCodes.BadRequest400) {
-      notify(response.msg, "error");
-      // console.log(response.msg);
+      // notify(response.msg, "error");
+      show(response.msg, "error", "Error");
       return;
     }
 
-    notify("Registration success", "success");
+    // notify("Registration success", "success");
+    show("Registration success", "success", "Success");
     navigate("/login");
   }
 
   return (
     <>
-      <Container size={"1"} mt={"9"}>
-        <Text size={"7"} className="text-center pb-5" asChild>
-          <h3>Register</h3>
-        </Text>
-        <Form.Root
+      <div className="mt-9 w-[400px] mx-auto">
+        <h3 className="text-center mb-5 text-4xl">Register</h3>
+        <form
           className="flex justify-center flex-col"
           onSubmit={(e) => handleSubmit(e)}
         >
-          <Flex justify={"between"} mb={"3"} gap={"3"}>
+          <div className="flex justify-between mb-3 gap-3">
             <Input
               labelText="first Name"
               inputTypeName="text"
@@ -82,7 +93,7 @@ const Register = (props: Props) => {
               handlerSet={setLastName}
               styled={{ width: "100%" }}
             />
-          </Flex>
+          </div>
 
           <Input
             labelText="email"
@@ -104,15 +115,14 @@ const Register = (props: Props) => {
             handlerSet={setConfirmPassword}
             styled={{ marginBottom: "2rem" }}
           />
-          <Form.Submit asChild>
-            <Button variant="solid" id="a">
-              Register
-            </Button>
-          </Form.Submit>
-        </Form.Root>
+          <Button type="submit" gradientDuoTone="purpleToBlue">
+            Register
+          </Button>
+        </form>
 
         {/* Toast */}
-      </Container>
+        <Toast ref={toast} />
+      </div>
     </>
   );
 };

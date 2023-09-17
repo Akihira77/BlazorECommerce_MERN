@@ -7,7 +7,6 @@ import { LiaProductHunt } from "react-icons/lia";
 import { AiOutlineLogin } from "react-icons/ai";
 import { RxDashboard } from "react-icons/rx";
 import { HiOutlineClipboardDocumentCheck } from "react-icons/hi2";
-import { Flex, Text } from "@radix-ui/themes";
 import "../assets/styles/SidebarNav.css";
 import { Outlet, useNavigate } from "react-router-dom";
 
@@ -19,7 +18,7 @@ const SidebarNav = (props: Props) => {
 
   return (
     <>
-      <Flex position={"relative"} style={{ width: "250px" }}>
+      <div className="relavite flex w-[250px]">
         <Sidebar
           style={{
             minHeight: "100vh",
@@ -39,43 +38,43 @@ const SidebarNav = (props: Props) => {
               icon={<RxDashboard />}
               onClick={() => navigate("/admin/dashboard")}
             >
-              <Text>Dashboard</Text>
+              <h4>Dashboard</h4>
             </MenuItem>
             <MenuItem
               icon={<FaUsersGear />}
               onClick={() => navigate("/admin/user")}
             >
-              <Text>User</Text>
+              <h4>User</h4>
             </MenuItem>
             <MenuItem
               icon={<HiOutlineClipboardDocumentCheck />}
               onClick={() => navigate("/admin/order")}
             >
-              <Text>Order</Text>
+              <h4>Order</h4>
             </MenuItem>
             <MenuItem
               icon={<MdOutlineCategory />}
               onClick={() => navigate("/admin/category")}
             >
-              <Text>Category</Text>
+              <h4>Category</h4>
             </MenuItem>
             <MenuItem
               icon={<LiaProductHunt />}
               onClick={() => navigate("/admin/product-type")}
             >
-              <Text>Product Type</Text>
+              <h4>Product Type</h4>
             </MenuItem>
             <MenuItem
               icon={<MdProductionQuantityLimits />}
               onClick={() => navigate("/admin/product")}
             >
-              <Text>Product</Text>
+              <h4>Product</h4>
             </MenuItem>
             <MenuItem
               icon={<AiOutlineLogin />}
               onClick={() => navigate("/admin/log")}
             >
-              <Text>Log</Text>
+              <h4>Log</h4>
             </MenuItem>
           </Menu>
         </Sidebar>
@@ -90,7 +89,7 @@ const SidebarNav = (props: Props) => {
           onClick={() => setCollapsed(!collapsed)}
         />
       </div> */}
-      </Flex>
+      </div>
       <Outlet />
     </>
   );

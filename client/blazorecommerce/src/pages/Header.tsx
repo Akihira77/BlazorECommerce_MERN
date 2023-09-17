@@ -8,7 +8,7 @@ type Props = {};
 
 const Header = (props: Props) => {
   return (
-    <div className="flex items-center gap-4 px-8 py-2 h-[65px] border-b-2">
+    <div className="flex items-center gap-4 px-14 py-2 h-[65px] border-b-2">
       <Brand />
       <Search />
       <div className="flex gap-3 items-center">

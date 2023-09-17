@@ -1,6 +1,5 @@
 import React from "react";
-// import { Link } from "react-router-dom";
-import { Flex, Avatar, Link, Button } from "@radix-ui/themes";
+import { Avatar, Button } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 
 type Props = {};
@@ -11,18 +10,20 @@ const Brand = (props: Props) => {
     <Button
       style={{
         transform: "rotate(-2deg)",
-        padding: "1.4rem 1rem",
       }}
-      variant="surface"
+      size={"xs"}
+      gradientDuoTone="purpleToBlue"
+      outline
       onClick={() => navigate("/")}
     >
-      <Flex gap="2" align={"center"}>
+      <div className="flex gap-2 items-center">
         <Avatar
-          src="https://res.cloudinary.com/duthytmqy/image/upload/v1682229266/bec-high-resolution-logo-color-on-transparent-background_mnb8ph.png"
-          fallback="brand"
+          img="https://res.cloudinary.com/duthytmqy/image/upload/v1682229266/bec-high-resolution-logo-color-on-transparent-background_mnb8ph.png"
+          className="w-[40px]"
+          size={"sm"}
         />
         <span>BlazorECommerce</span>
-      </Flex>
+      </div>
     </Button>
   );
 };

@@ -1,34 +1,32 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Dialog,
-  Flex,
-  Text,
-  TextField,
-  Select,
-} from "@radix-ui/themes";
+import { Button, Modal, TextInput, Select } from "flowbite-react";
 import { getFromApi, postToApi } from "../../utils/axiosCommand.ts";
 import {
   CategoryType,
   ErrorResponse,
   SuccessResponse,
 } from "../../utils/types";
+import { GrAdd } from "react-icons/gr";
+import {
+  CascadeSelect,
+  CascadeSelectChangeEvent,
+} from "primereact/cascadeselect";
 
 type Props = {
   setFlag: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CreateProductType = ({ setFlag }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState<string | undefined>();
   const [name, setName] = useState("Book");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryType[]>();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     postToApi("product-type", { name, category: selectedCategory }).then(() => {
-      setOpen(false);
+      setOpenModal(undefined);
       setFlag((prev) => !prev);
     });
   }
@@ -48,66 +46,73 @@ const CreateProductType = ({ setFlag }: Props) => {
   }, []);
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger>
-        <Button
-          variant="surface"
-          style={{ position: "relative", left: "83.25%" }}
-          color="green"
-        >
-          Create New Product Type
-        </Button>
-      </Dialog.Trigger>
-
-      <Dialog.Content style={{ maxWidth: 450 }}>
-        <Dialog.Title>Create New Product Type</Dialog.Title>
-        <form
-          action=""
-          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-          onSubmit={(e) => handleSubmit(e)}
-        >
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Name
-            </Text>
-            <TextField.Input
-              defaultValue={name}
-              placeholder="category name"
-              onChange={(e) => setName(e.target.value)}
-            />
-          </label>
-
-          <Select.Root
-            onValueChange={(categoryId) => setSelectedCategory(categoryId)}
+    <div className="relative" style={{ left: "81%" }}>
+      <Button
+        gradientDuoTone="greenToBlue"
+        outline
+        onClick={() => setOpenModal("default")}
+      >
+        <div className="flex items-center gap-2">
+          <GrAdd />
+          <p>Create New Product Type</p>
+        </div>
+      </Button>
+      <Modal
+        show={openModal === "default"}
+        onClose={() => setOpenModal(undefined)}
+      >
+        <Modal.Header>Create New Product Type</Modal.Header>
+        <Modal.Body>
+          <form
+            action=""
+            className="flex flex-col gap-4"
+            onSubmit={(e) => handleSubmit(e)}
           >
-            <Select.Trigger
-              placeholder="Select a category..."
-              variant="surface"
-            />
-            <Select.Content position="popper">
-              <Select.Group>
-                <Select.Label>Category</Select.Label>
-                {categories &&
-                  categories.map((category) => (
-                    <Select.Item value={category.id} key={category.id}>
-                      {category.name}
-                    </Select.Item>
-                  ))}
-              </Select.Group>
-            </Select.Content>
-          </Select.Root>
+            <label className="mb-2">
+              <div className="mb-1 font-bold">Name</div>
+              <TextInput
+                defaultValue={name}
+                placeholder="category name"
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
 
-          <Flex gap="3" mt="4" justify="end">
-            <Dialog.Close>
-              <Button variant="soft" color="gray">
-                Cancel
-              </Button>
-            </Dialog.Close>
-            <Button type="submit">Create</Button>
-          </Flex>
-        </form>
-      </Dialog.Content>
-    </Dialog.Root>
+            <span className="p-float-label">
+              <CascadeSelect
+                inputId="multiselect"
+                value={selectedCategory}
+                onChange={(e: CascadeSelectChangeEvent) =>
+                  setSelectedCategory(e.value)
+                }
+                options={categories}
+                optionLabel="name"
+                optionGroupChildren={[]}
+                className="md:w-20rem w-full"
+              ></CascadeSelect>
+              <label htmlFor="multiselect">Category</label>
+            </span>
+
+            {/* <Select onChange={(e) => setSelectedCategory(e)}>
+              {categories &&
+                categories.map((category) => (
+                  <option value={category.id} key={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+            </Select> */}
+
+            <div className="flex gap-3 mt-4 justify-end">
+              <Modal.Footer>
+                <Button color="gray" onClick={() => setOpenModal(undefined)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Create</Button>
+              </Modal.Footer>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
+    </div>
   );
 };
 

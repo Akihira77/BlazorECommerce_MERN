@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
+import { Button, Modal, TextInput } from "flowbite-react";
 import { postToApi } from "../../utils/axiosCommand.ts";
+import { GrAdd } from "react-icons/gr";
 
 type Props = {
   setFlag: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CreateCategory = ({ setFlag }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState<string | undefined>();
   const [name, setName] = useState("Book");
   const [url, setUrl] = useState("books");
 
@@ -15,62 +16,65 @@ const CreateCategory = ({ setFlag }: Props) => {
     e.preventDefault();
 
     postToApi("category", { name, url }).then(() => {
-      setOpen(false);
+      setOpenModal(undefined);
       setFlag((prev) => !prev);
     });
   }
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger>
-        <Button
-          variant="surface"
-          style={{ position: "relative", left: "85.5%" }}
-          color="green"
-        >
-          Create New Category
-        </Button>
-      </Dialog.Trigger>
+    <div className="relative" style={{ left: "83.4%" }}>
+      <Button
+        gradientDuoTone="greenToBlue"
+        outline
+        onClick={() => setOpenModal("default")}
+      >
+        <div className="flex items-center gap-2">
+          <GrAdd />
+          <p>Create New Category</p>
+        </div>
+      </Button>
 
-      <Dialog.Content style={{ maxWidth: 450 }}>
-        <Dialog.Title>Create New Category</Dialog.Title>
-        <form
-          action=""
-          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-          onSubmit={(e) => handleSubmit(e)}
-        >
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Name
-            </Text>
-            <TextField.Input
-              defaultValue={name}
-              placeholder="category name"
-              onChange={(e) => setName(e.target.value)}
-            />
-          </label>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Url
-            </Text>
-            <TextField.Input
-              defaultValue={url}
-              placeholder="url for category"
-              onChange={(e) => setUrl(e.target.value)}
-            />
-          </label>
+      <Modal
+        show={openModal === "default"}
+        onClose={() => setOpenModal(undefined)}
+      >
+        <Modal.Header>Create New Category</Modal.Header>
 
-          <Flex gap="3" mt="4" justify="end">
-            <Dialog.Close>
-              <Button variant="soft" color="gray">
-                Cancel
-              </Button>
-            </Dialog.Close>
-            <Button type="submit">Create</Button>
-          </Flex>
-        </form>
-      </Dialog.Content>
-    </Dialog.Root>
+        <Modal.Body>
+          <form
+            action=""
+            className="flex flex-col gap-4 [&>label]:px-6"
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <label>
+              <div className="mb-1 font-bold">Name</div>
+              <TextInput
+                defaultValue={name}
+                placeholder="category name"
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
+            <label>
+              <div className="mb-1 font-bold">Url</div>
+              <TextInput
+                defaultValue={url}
+                placeholder="url for category"
+                onChange={(e) => setUrl(e.target.value)}
+              />
+            </label>
+
+            <div className="flex gap-3 mt-4 justify-end">
+              <Modal.Footer>
+                <Button color="gray" onClick={() => setOpenModal(undefined)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Create</Button>
+              </Modal.Footer>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
+    </div>
   );
 };
 

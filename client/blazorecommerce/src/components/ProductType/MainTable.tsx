@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Table } from "@radix-ui/themes";
+import { Table } from "flowbite-react";
 import { ProductTypesType } from "../../utils/types";
 import EditProductType from "./EditProductType.tsx";
 import DeleteProductType from "./DeleteProductType.tsx";
@@ -11,22 +11,14 @@ type Props = {
 
 const MainTable = ({ productTypes, setFlag }: Props) => {
   return (
-    <Table.Root variant="surface" style={{ marginTop: "1rem" }}>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeaderCell justify={"center"}>
-            Name
-          </Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell justify={"center"}>
-            Category
-          </Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell justify={"center"}>
-            Actions
-          </Table.ColumnHeaderCell>
-        </Table.Row>
-      </Table.Header>
+    <Table hoverable style={{ marginTop: "1rem" }}>
+      <Table.Head>
+        <Table.HeadCell align={"center"}>Name</Table.HeadCell>
+        <Table.HeadCell align={"center"}>Category</Table.HeadCell>
+        <Table.HeadCell align={"center"}>Actions</Table.HeadCell>
+      </Table.Head>
 
-      <Table.Body>
+      <Table.Body className="divide-y">
         {productTypes &&
           productTypes.map((item) => (
             <Table.Row key={item.id}>
@@ -40,26 +32,26 @@ const MainTable = ({ productTypes, setFlag }: Props) => {
                   alignItems: "center",
                 }}
               >
-                <Box>
+                <div>
                   <EditProductType
                     productTypeCategory={item.category.name}
                     setFlag={setFlag}
                     productTypeId={item.id}
                     productTypeName={item.name}
                   />
-                </Box>
-                <Box>
+                </div>
+                <div>
                   <DeleteProductType
                     setFlag={setFlag}
                     productTypeId={item.id}
                     productTypeName={item.name}
                   />
-                </Box>
+                </div>
               </Table.Cell>
             </Table.Row>
           ))}
       </Table.Body>
-    </Table.Root>
+    </Table>
   );
 };
 

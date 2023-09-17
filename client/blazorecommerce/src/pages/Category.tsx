@@ -1,4 +1,3 @@
-import { Container } from "@radix-ui/themes";
 import CreateCategory from "../components/Category/CreateCategory.tsx";
 import { useEffect, useState } from "react";
 import { getFromApi } from "../utils/axiosCommand.ts";
@@ -30,10 +29,10 @@ const Category = (props: Props) => {
   }, [flag]);
 
   return (
-    <Container pt={"5"} size={"4"} position={"relative"}>
+    <div className="pt-5 relative container mr-4">
       <CreateCategory setFlag={setFlag} />
       <MainTable setFlag={setFlag} categories={categories} />
-    </Container>
+    </div>
   );
 };
 

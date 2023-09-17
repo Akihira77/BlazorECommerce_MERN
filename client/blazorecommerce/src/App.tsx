@@ -3,26 +3,23 @@ import Header from "./pages/Header.tsx";
 import { Routes, Route } from "react-router-dom";
 import Login from "./components/Header/Login.tsx";
 import Register from "./components/Header/Register.tsx";
-import { Section } from "@radix-ui/themes";
 import Body from "./pages/Body.tsx";
 import Category from "./pages/Category.tsx";
 import SidebarNav from "./pages/SidebarNav.tsx";
 import UserList from "./pages/UserList.tsx";
 import ProductType from "./pages/ProductType.tsx";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <>
       {/* Header */}
       <main style={{ maxHeight: "100vh", overflow: "hidden" }}>
-        <Section p={"0"}>
+        <section className="p-0">
           <Header />
-        </Section>
+        </section>
 
         {/* Sidebar */}
-        <Section p={"0"} style={{ display: "flex", gap: "20px" }}>
+        <section className="p-0 flex gap-4">
           <Routes>
             {/* <Route path="/" /> */}
             <Route path="admin" element={<SidebarNav />}>
@@ -35,9 +32,8 @@ function App() {
             <Route path="/register" element={<Register />} />
           </Routes>
           {/* <Outlet /> */}
-        </Section>
+        </section>
       </main>
-      <ToastContainer />
     </>
   );
 }

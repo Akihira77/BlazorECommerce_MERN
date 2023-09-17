@@ -1,6 +1,6 @@
 import React from "react";
 import { CategoryType } from "../../utils/types";
-import { Box, Table } from "@radix-ui/themes";
+import { Table } from "flowbite-react";
 import EditCategory from "./EditCategory.tsx";
 import DeleteCategory from "./DeleteCategory.tsx";
 
@@ -11,22 +11,14 @@ type Props = {
 
 const MainTable = ({ categories, setFlag }: Props) => {
   return (
-    <Table.Root variant="surface" style={{ marginTop: "1rem" }}>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeaderCell justify={"center"}>
-            Name
-          </Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell justify={"center"}>
-            Url
-          </Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell justify={"center"}>
-            Actions
-          </Table.ColumnHeaderCell>
-        </Table.Row>
-      </Table.Header>
+    <Table hoverable style={{ marginTop: "1rem" }}>
+      <Table.Head>
+        <Table.HeadCell align="center">Name</Table.HeadCell>
+        <Table.HeadCell align="center">Url</Table.HeadCell>
+        <Table.HeadCell align="center">Actions</Table.HeadCell>
+      </Table.Head>
 
-      <Table.Body>
+      <Table.Body className="divide-y">
         {categories &&
           categories.map((item) => (
             <Table.Row key={item.id}>
@@ -40,27 +32,27 @@ const MainTable = ({ categories, setFlag }: Props) => {
                   alignItems: "center",
                 }}
               >
-                <Box>
+                <div>
                   <EditCategory
                     setFlag={setFlag}
                     categoryId={item.id}
                     categoryName={item.name}
                     categoryUrl={item.url}
                   />
-                </Box>
-                <Box>
+                </div>
+                <div>
                   <DeleteCategory
                     setFlag={setFlag}
                     categoryId={item.id}
                     categoryName={item.name}
                     categoryUrl={item.url}
                   />
-                </Box>
+                </div>
               </Table.Cell>
             </Table.Row>
           ))}
       </Table.Body>
-    </Table.Root>
+    </Table>
   );
 };
 

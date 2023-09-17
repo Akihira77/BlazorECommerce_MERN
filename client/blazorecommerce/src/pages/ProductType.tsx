@@ -1,4 +1,3 @@
-import { Container } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import { getFromApi } from "../utils/axiosCommand.ts";
 import {
@@ -30,10 +29,10 @@ const ProductType = (props: Props) => {
   }, [flag]);
 
   return (
-    <Container pt={"5"} size={"4"} position={"relative"}>
+    <div className="pt-5 relative container mr-4">
       <CreateProductType setFlag={setFlag} />
       <MainTable productTypes={productTypes} setFlag={setFlag} />
-    </Container>
+    </div>
   );
 };
 

@@ -1,47 +1,43 @@
 import { BsFillPersonFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { DropdownMenu, Button } from "@radix-ui/themes";
+import { Dropdown } from "flowbite-react";
 
 type Props = {};
 
 const UserButton = (props: Props) => {
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Button variant="surface" size={"3"}>
-          <BsFillPersonFill />
-        </Button>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content variant="soft">
-        {/* <DropdownMenu.Item>Profile</DropdownMenu.Item> */}
-        <DropdownMenu.Item>
-          <Link
-            to={"/login"}
-            style={{
-              textDecoration: "none",
-              color: "rgb(28, 32, 36)",
-              cursor: "pointer",
-            }}
-            reloadDocument
-          >
-            Login
-          </Link>
-        </DropdownMenu.Item>
-        <DropdownMenu.Item>
-          <Link
-            to={"/register"}
-            style={{
-              textDecoration: "none",
-              color: "rgb(28, 32, 36)",
-              cursor: "pointer",
-            }}
-            reloadDocument
-          >
-            Register
-          </Link>
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+    <Dropdown
+      label={<BsFillPersonFill />}
+      gradientDuoTone="purpleToBlue"
+      outline
+    >
+      <Dropdown.Item>
+        <Link
+          to={"/login"}
+          style={{
+            textDecoration: "none",
+            color: "rgb(28, 32, 36)",
+            cursor: "pointer",
+          }}
+          reloadDocument
+        >
+          Login
+        </Link>
+      </Dropdown.Item>
+      <Dropdown.Item>
+        <Link
+          to={"/register"}
+          style={{
+            textDecoration: "none",
+            color: "rgb(28, 32, 36)",
+            cursor: "pointer",
+          }}
+          reloadDocument
+        >
+          Register
+        </Link>
+      </Dropdown.Item>
+    </Dropdown>
   );
 };
 

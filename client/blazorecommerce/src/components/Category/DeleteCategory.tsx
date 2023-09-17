@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
+import { Button, Modal, TextInput } from "flowbite-react";
 import { FiTrash } from "react-icons/fi";
 import { deleteToApi } from "../../utils/axiosCommand.ts";
 
@@ -16,64 +16,64 @@ const DeleteCategory = ({
   categoryUrl,
   setFlag,
 }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState<string | undefined>();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     deleteToApi("category", categoryId!).then(() => {
-      setOpen(false);
+      setOpenModal(undefined);
       setFlag((prev) => !prev);
     });
   }
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger>
-        <Button variant="surface" color="red">
-          <FiTrash />
-        </Button>
-      </Dialog.Trigger>
-
-      <Dialog.Content style={{ maxWidth: 450 }}>
-        <Dialog.Title>Delete Category</Dialog.Title>
+    <>
+      <Button
+        gradientDuoTone="purpleToPink"
+        outline
+        onClick={() => setOpenModal("default")}
+      >
+        <FiTrash />
+      </Button>
+      <Modal
+        show={openModal === "default"}
+        onClose={() => setOpenModal(undefined)}
+      >
+        <Modal.Header>Delete Category</Modal.Header>
         <form
           action=""
-          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           onSubmit={(e) => handleSubmit(e)}
+          className="flex flex-col gap-4 [&>label]:px-6"
         >
           <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Name
-            </Text>
-            <TextField.Input
+            <div className="mb-1 font-bold">Name</div>
+            <TextInput
               defaultValue={categoryName ?? ""}
               placeholder="category name"
               disabled
             />
           </label>
           <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Url
-            </Text>
-            <TextField.Input
+            <div className="mb-1 font-bold">Url</div>
+            <TextInput
               defaultValue={categoryUrl ?? ""}
               placeholder="url for category"
               disabled
             />
           </label>
 
-          <Flex gap="3" mt="4" justify="end">
-            <Dialog.Close>
-              <Button variant="soft" color="gray">
+          <div className="flex gap-3 mt-4 justify-end">
+            <Modal.Footer>
+              <Button color="gray" onClick={() => setOpenModal(undefined)}>
                 Cancel
               </Button>
-            </Dialog.Close>
-            <Button type="submit">Delete</Button>
-          </Flex>
+              <Button type="submit">Delete</Button>
+            </Modal.Footer>
+          </div>
         </form>
-      </Dialog.Content>
-    </Dialog.Root>
+      </Modal>
+    </>
   );
 };
 
