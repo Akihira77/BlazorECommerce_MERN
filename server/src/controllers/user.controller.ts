@@ -25,7 +25,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
 const login = async (req: Request, res: Response): Promise<void> => {
   const user = await userService.getByEmail(req.body.email);
   if (!user) {
-    throw new NotFoundError("User not found", StatusCodes.NotFound404);
+    throw new NotFoundError("User not found");
   }
 
   const isMatch: boolean = await bcrypt.compare(

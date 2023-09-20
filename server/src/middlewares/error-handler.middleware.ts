@@ -33,7 +33,7 @@ const errorHandlerMiddleware = async (
       customError = {
         statusCode: StatusCodes.BadRequest400,
         msg: Object.values(err.errors)
-          .map((item: any) => item.message)
+          .map((item: any) => `[${item.path} ${item.message}]`)
           .join(","),
       };
       break;

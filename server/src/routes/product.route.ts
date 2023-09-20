@@ -3,6 +3,8 @@ import * as productController from "../controllers/product.controller.js";
 
 const productRoute: Router = express();
 
-productRoute.get("/", productController.getAll);
+productRoute.get("/", productController.getAllPopulateVariant);
+productRoute.post("/", productController.add);
+productRoute.post("/add-variant", productController.addVariantToProduct);
 
 export default productRoute;

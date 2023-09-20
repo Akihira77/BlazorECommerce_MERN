@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import mongoose from "mongoose";
 
 interface IBaseService {
   getAllAsync: () => Promise<unknown>;
@@ -8,7 +8,7 @@ interface IBaseService {
 }
 
 export class BaseService<T> implements IBaseService {
-  constructor(protected readonly model: typeof Model) {}
+  constructor(protected readonly model: typeof mongoose.Model) {}
 
   async getAllAsync(): Promise<T[]> {
     return await this.model.find();
@@ -27,5 +27,9 @@ export class BaseService<T> implements IBaseService {
 
   async deleteAsync(id: string): Promise<T | null> {
     return await this.model.findByIdAndDelete(id);
+  }
+
+  async convertStringToObjectId(id: string): Promise<mongoose.Types.ObjectId> {
+    return new mongoose.Types.ObjectId(id);
   }
 }

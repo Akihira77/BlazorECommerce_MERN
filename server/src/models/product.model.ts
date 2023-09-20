@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
+import categoryModel from "./category.model.js";
+import productVariantModel from "./productVariant.model.js";
 
 export interface IProductModel extends mongoose.Document {
   title: string;
   description: string;
   imageUrl: string;
+  category: mongoose.Schema.Types.ObjectId;
+  variants: [mongoose.Schema.Types.ObjectId];
   featured: boolean;
   visible: boolean;
   deleted: boolean;
@@ -26,6 +30,18 @@ const productSchema = new mongoose.Schema<IProductModel>(
       required: true,
       trim: true,
     },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: categoryModel,
+    },
+    variants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: productVariantModel,
+      },
+    ],
     deleted: {
       type: Boolean,
       default: false,
