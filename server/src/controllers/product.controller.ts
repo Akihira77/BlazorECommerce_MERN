@@ -32,11 +32,23 @@ const add = async (req: Request, res: Response): Promise<void> => {
     featured,
     visible,
     deleted,
-    variant,
+    variants,
   } = req.body;
 
-  const savedVariant = await productVariantService.addAsync(variant);
-  const variants = [savedVariant];
+  // console.log(req.body);
+  const variantsTemp = variants.map((variant: any) => ({
+    productType: variant.productType.id,
+    price: variant.price,
+    originalPrice: variant.originalPrice,
+    visible: variant.visible,
+    deleted: variant.deleted,
+  }));
+
+  const savedVariants = await productVariantService.insertManyAsync(
+    variantsTemp
+  );
+
+  console.log(Object.values(savedVariants));
 
   const request = {
     title,
@@ -46,12 +58,12 @@ const add = async (req: Request, res: Response): Promise<void> => {
     featured,
     visible,
     deleted,
-    variants,
+    variants: Object.values(savedVariants),
   };
 
   await productService.addAsync(request);
 
-  await getAllPopulateVariant(req, res);
+  res.status(StatusCodes.Created201).send({ msg: "Creating product success" });
   return;
 };
 

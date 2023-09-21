@@ -2,14 +2,14 @@ import React from "react";
 import CreateCategory from "../components/Category/CreateCategory.tsx";
 import MainTable from "../components/Category/MainTable.tsx";
 import useGetFromApi from "../hooks/useGetFromApi.tsx";
-import { ResultType } from "../components/Category/type.ts";
+import { CategoryResultType } from "../components/Category/type.ts";
 import { CategoryType } from "../utils/types";
 import { ProgressSpinner } from "primereact/progressspinner";
 
 type Props = {};
 
 const Category = (props: Props) => {
-  const data = useGetFromApi<ResultType>("category")?.categories;
+  const data = useGetFromApi<CategoryResultType>("category")?.categories;
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
 
   React.useEffect(() => {

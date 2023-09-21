@@ -25,6 +25,16 @@ export class BaseService<T> implements IBaseService {
     return savedDocument;
   }
 
+  async insertManyAsync(
+    request: unknown
+  ): Promise<{ [key: number]: mongoose.Types.ObjectId }> {
+    const savedDocuments = await this.model.insertMany(request, {
+      rawResult: true,
+    });
+
+    return savedDocuments.insertedIds;
+  }
+
   async deleteAsync(id: string): Promise<T | null> {
     return await this.model.findByIdAndDelete(id);
   }

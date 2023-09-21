@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import productTypeService from "../services/productType.service.js";
 import { StatusCodes } from "../utils/constant.js";
 
-const getAll = async (req: Request, res: Response): Promise<void> => {
+const getAndMap = async (): Promise<unknown> => {
   const productTypes = await productTypeService.getAllPopulateCategory();
 
   const result: unknown = productTypes.map(({ id, name, category }) => {
@@ -13,7 +13,11 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     };
   });
 
-  res.status(StatusCodes.Ok200).send({ productTypes: result });
+  return result;
+};
+
+const getAll = async (req: Request, res: Response): Promise<void> => {
+  res.status(StatusCodes.Ok200).send({ productTypes: await getAndMap() });
   return;
 };
 
@@ -28,28 +32,24 @@ const getByName = async (
 };
 
 const add = async (req: Request, res: Response): Promise<void> => {
-  console.log(req.body);
-  const category = await productTypeService.addAsync(req.body);
+  await productTypeService.addAsync(req.body);
 
-  res.status(StatusCodes.Created201).send({ category });
+  res.status(StatusCodes.Created201).send({ productTypes: await getAndMap() });
   return;
 };
 
 const remove = async (req: Request, res: Response): Promise<void> => {
-  const category = await productTypeService.deleteAsync(req.params.id);
+  await productTypeService.deleteAsync(req.params.id);
 
-  res.status(StatusCodes.Ok200).send({ category });
+  res.status(StatusCodes.Ok200).send({ productTypes: await getAndMap() });
   return;
 };
 
 const update = async (req: Request, res: Response): Promise<void> => {
   console.log(req.body);
-  const category = await productTypeService.updateAsync(
-    req.params.id,
-    req.body
-  );
+  await productTypeService.updateAsync(req.params.id, req.body);
 
-  res.status(StatusCodes.Ok200).send({ category });
+  res.status(StatusCodes.Ok200).send({ productTypes: await getAndMap() });
   return;
 };
 

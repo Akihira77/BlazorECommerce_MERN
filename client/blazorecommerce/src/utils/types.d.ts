@@ -11,7 +11,7 @@ export type ErrorResponse = {
 export type ApiResponse = SuccessResponse | ErrorResponse;
 
 export type CategoryType = {
-  id: string;
+  _id: string;
   name: string;
   url: string;
   visible: boolean;
@@ -24,9 +24,23 @@ export type ProductTypesType = {
   category: CategoryType;
 };
 
+type VariantType = {
+  id?: number;
+  price: number;
+  originalPrice: number;
+  productType: ProductTypesType;
+  visible: boolean;
+  deleted: boolean;
+};
+
 export type ProductType = {
+  _id?: string;
   title: string;
+  imageUrl: string;
+  description: string;
   featured: boolean;
+  category: CategoryType;
+  variants: VariantType[];
   visible: boolean;
   deleted: boolean;
 };

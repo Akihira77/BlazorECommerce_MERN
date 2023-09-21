@@ -2,7 +2,7 @@ import React from "react";
 import CreateProductType from "../components/ProductType/CreateProductType.tsx";
 import MainTable from "../components/ProductType/MainTable.tsx";
 import useGetFromApi from "../hooks/useGetFromApi.tsx";
-import { ResultType } from "../components/ProductType/type.ts";
+import { ProductTypeResultType } from "../components/ProductType/type.ts";
 import { ProductTypesType } from "../utils/types";
 import { ProgressSpinner } from "primereact/progressspinner";
 
@@ -13,7 +13,8 @@ const ProductType = (props: Props) => {
     []
   );
 
-  const data = useGetFromApi<ResultType>("product-type")?.productTypes;
+  const data =
+    useGetFromApi<ProductTypeResultType>("product-type")?.productTypes;
 
   React.useEffect(() => {
     if (data) {

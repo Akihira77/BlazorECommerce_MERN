@@ -21,13 +21,13 @@ const SidebarNav = (props: Props) => {
       <div className="relavite flex w-[250px]">
         <Sidebar
           style={{
-            minHeight: "100vh",
-            overflow: "auto",
             color: "rgb(139, 161, 183)",
             borderRight: "2px solid #ddd",
+            minHeight: "90.8vh",
           }}
           breakPoint="lg"
           collapsed={collapsed}
+          className="overflow-auto"
         >
           <Menu style={{ paddingTop: "1.5rem" }}>
             <SubMenu icon={<IoStatsChart />} label="Charts">

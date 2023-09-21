@@ -9,12 +9,14 @@ import SidebarNav from "./pages/SidebarNav.tsx";
 import UserList from "./pages/UserList.tsx";
 import ProductType from "./pages/ProductType.tsx";
 import Product from "./pages/Product.tsx";
+import CreateProduct from "./pages/CreateProduct.tsx";
+import EditProduct from "./pages/EditProduct.tsx";
 
 function App() {
   return (
     <>
       {/* Header */}
-      <main style={{ maxHeight: "100vh", overflow: "hidden" }}>
+      <main>
         <section className="p-0">
           <Header />
         </section>
@@ -27,7 +29,11 @@ function App() {
               {/* <Route index /> */}
               <Route path="category" element={<Category />} />
               <Route path="product-type" element={<ProductType />} />
-              <Route path="product" element={<Product />} />
+              <Route path="product">
+                <Route index element={<Product />} />
+                <Route path="create" element={<CreateProduct />} />
+                <Route path="edit/:id" element={<EditProduct />} />
+              </Route>
             </Route>
             <Route path="/user" element={<UserList />} />
             <Route path="/login" element={<Login />} />

@@ -35,7 +35,7 @@ const MainTable = ({ categories, setCategories }: Props) => {
                 <div>
                   <EditCategory
                     setCategories={setCategories}
-                    categoryId={item.id}
+                    categoryId={item._id}
                     categoryName={item.name}
                     categoryUrl={item.url}
                   />
@@ -43,7 +43,7 @@ const MainTable = ({ categories, setCategories }: Props) => {
                 <div>
                   <DeleteCategory
                     setCategories={setCategories}
-                    categoryId={item.id}
+                    categoryId={item._id}
                     categoryName={item.name}
                     categoryUrl={item.url}
                   />

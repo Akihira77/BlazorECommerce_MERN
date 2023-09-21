@@ -3,31 +3,47 @@ import { Button, Modal, TextInput } from "flowbite-react";
 import { postToApi } from "../../utils/axiosCommand.ts";
 import { GrAdd } from "react-icons/gr";
 import { CategoryType } from "@/src/utils/types.js";
+import { Toast } from "primereact/toast";
 
 type Props = {
   setCategories: React.Dispatch<React.SetStateAction<CategoryType[]>>;
 };
 
 const CreateCategory = ({ setCategories }: Props) => {
+  const toast = React.useRef<Toast>(null);
   const [openModal, setOpenModal] = useState<string>();
   const [name, setName] = useState("Book");
   const [url, setUrl] = useState("books");
 
+  const show = (e: any) => {
+    toast.current?.show({
+      severity: "error",
+      summary: "Error",
+      detail: e,
+    });
+  };
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    postToApi("category", { name, url }).then((response) => {
+    const response = await postToApi("category", { name, url });
+
+    if ("data" in response) {
       setCategories(response.data?.data.categories);
       setOpenModal(undefined);
-    });
+    } else {
+      show(response.msg);
+    }
   }
 
   return (
-    <div className="relative" style={{ left: "83.4%" }}>
+    <div className="relative mb-16">
+      <Toast ref={toast} />
       <Button
         gradientDuoTone="greenToBlue"
         outline
         onClick={() => setOpenModal("default")}
+        className="absolute right-0"
       >
         <div className="flex items-center gap-2">
           <GrAdd />

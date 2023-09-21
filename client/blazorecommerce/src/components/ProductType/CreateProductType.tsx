@@ -8,31 +8,46 @@ import {
   CascadeSelectChangeEvent,
 } from "primereact/cascadeselect";
 import useGetFromApi from "../../hooks/useGetFromApi.tsx";
-import { ResultType } from "../Category/type.ts";
+import { CategoryResultType } from "../Category/type.ts";
+import { Toast } from "primereact/toast";
 
 type Props = {
   setProductTypes: React.Dispatch<React.SetStateAction<ProductTypesType[]>>;
 };
 
 const CreateProductType = ({ setProductTypes }: Props) => {
+  const toast = React.useRef<Toast>(null);
   const [openModal, setOpenModal] = React.useState<string | undefined>();
   const [name, setName] = React.useState("Book");
   const [selectedCategory, setSelectedCategory] =
     React.useState<CategoryType | null>(null);
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
 
+  const show = (e: any) => {
+    toast.current?.show({
+      severity: "error",
+      summary: "Error",
+      detail: e,
+    });
+  };
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    postToApi("product-type", { name, category: selectedCategory?.id }).then(
-      (response) => {
-        setProductTypes(response.data?.data.productTypes);
-        setOpenModal(undefined);
-      }
-    );
+    const response = await postToApi("product-type", {
+      name,
+      category: selectedCategory?._id,
+    });
+
+    if ("data" in response) {
+      setProductTypes(response.data?.data.productTypes);
+      setOpenModal(undefined);
+    } else {
+      show(response.msg);
+    }
   }
 
-  const data = useGetFromApi<ResultType>("category")?.categories;
+  const data = useGetFromApi<CategoryResultType>("category")?.categories;
 
   React.useEffect(() => {
     if (data) {
@@ -41,11 +56,13 @@ const CreateProductType = ({ setProductTypes }: Props) => {
   }, [data]);
 
   return (
-    <div className="relative" style={{ left: "81%" }}>
+    <div className="relative mb-16">
+      <Toast ref={toast} />
       <Button
         gradientDuoTone="greenToBlue"
         outline
         onClick={() => setOpenModal("default")}
+        className="absolute right-0"
       >
         <div className="flex items-center gap-2">
           <GrAdd />
