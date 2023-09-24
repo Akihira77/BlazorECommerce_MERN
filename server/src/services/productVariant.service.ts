@@ -11,6 +11,11 @@ class ProductVariantService extends BaseService<IProductVariantModel> {
       .find({ product: productId })
       .populate("productType");
   }
+
+  async removeProductVariants(variants: unknown): Promise<number> {
+    const result = await this.model.deleteMany({ _id: { $in: variants } });
+    return result.deletedCount;
+  }
 }
 
 export default new ProductVariantService(productVariantModel);

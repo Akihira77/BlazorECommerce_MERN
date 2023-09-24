@@ -14,6 +14,29 @@ class ProductService extends BaseService<IProductModel> {
     return await this.model.find().populate("category");
   }
 
+  async getByIdPopulateCategoryVariantsAndProductType(
+    id: string
+  ): Promise<
+    | (Omit<unknown, keyof IProductModel> & IProductModel)[]
+    | (Omit<any, keyof IProductModel> & IProductModel)
+    | null
+  > {
+    return await this.model
+      .findById(id)
+      .populate(["category", "variants"])
+      .populate({ path: "variants", populate: "productType" });
+  }
+
+  async getByIdVariants(
+    productId: string
+  ): Promise<
+    | (Omit<unknown, keyof IProductModel> & IProductModel)[]
+    | (Omit<any, keyof IProductModel> & IProductModel)
+    | null
+  > {
+    return await this.model.findById(productId).populate("variants");
+  }
+
   async getAllWithCategoryAndProductType(): Promise<IProductModel[]> {
     return await this.model
       .find()

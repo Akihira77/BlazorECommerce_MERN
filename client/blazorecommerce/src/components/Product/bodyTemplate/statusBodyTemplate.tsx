@@ -1,7 +1,7 @@
 import { ProductType } from "@/src/utils/types.js";
 import { Checkbox } from "primereact/checkbox";
 
-const statusBodyTemplate = (product: ProductType) => {
+const StatusBodyTemplate = (product: ProductType) => {
   return (
     <div className="ms-6 card flex flex-col gap-3">
       <div className="flex items-center">
@@ -41,4 +41,4 @@ const statusBodyTemplate = (product: ProductType) => {
   );
 };
 
-export default statusBodyTemplate;
+export default StatusBodyTemplate;

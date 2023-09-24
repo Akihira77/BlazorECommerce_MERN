@@ -5,6 +5,7 @@ import BadRequestError from "../errors/bad-request.js";
 import productVariantService from "../services/productVariant.service.js";
 import NotFoundError from "../errors/not-found.js";
 import productTypeService from "../services/productType.service.js";
+import { IProductModel } from "../models/product.model.js";
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const products = await productService.getAllAsync();
@@ -35,7 +36,6 @@ const add = async (req: Request, res: Response): Promise<void> => {
     variants,
   } = req.body;
 
-  // console.log(req.body);
   const variantsTemp = variants.map((variant: any) => ({
     productType: variant.productType.id,
     price: variant.price,
@@ -47,8 +47,6 @@ const add = async (req: Request, res: Response): Promise<void> => {
   const savedVariants = await productVariantService.insertManyAsync(
     variantsTemp
   );
-
-  console.log(Object.values(savedVariants));
 
   const request = {
     title,
@@ -88,4 +86,41 @@ const addVariantToProduct = async (
   return;
 };
 
-export { getAll, getAllPopulateVariant, add, addVariantToProduct };
+const getById = async (req: Request, res: Response) => {
+  const product =
+    await productService.getByIdPopulateCategoryVariantsAndProductType(
+      req.params.id
+    );
+
+  if (!product) {
+    throw new NotFoundError("Product is not found");
+  }
+
+  res.status(StatusCodes.Ok200).send({ product });
+  return;
+};
+
+const remove = async (req: Request, res: Response) => {
+  const product = await productService.getByIdAsync(req.params.id);
+  await productService.deleteAsync(req.params.id);
+
+  if (!product) {
+    throw new NotFoundError("Product does not found");
+  }
+
+  const deletedCount = await productVariantService.removeProductVariants(
+    product.variants
+  );
+
+  res.status(StatusCodes.Ok200).send({ msg: "Deleting success", deletedCount });
+  return;
+};
+
+export {
+  getAll,
+  getAllPopulateVariant,
+  add,
+  addVariantToProduct,
+  getById,
+  remove,
+};

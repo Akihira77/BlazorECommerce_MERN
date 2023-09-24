@@ -25,7 +25,7 @@ export type ProductTypesType = {
 };
 
 type VariantType = {
-  id?: number;
+  _id?: number;
   price: number;
   originalPrice: number;
   productType: ProductTypesType;

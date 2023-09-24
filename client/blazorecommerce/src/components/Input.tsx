@@ -4,11 +4,20 @@ import React from "react";
 type Props = {
   inputTypeName: string;
   labelText: string;
-  handlerSet: React.Dispatch<React.SetStateAction<string>>;
+  handlerSet?: React.Dispatch<React.SetStateAction<string>>;
   styled?: object;
+  defaultValue?: unknown;
+  readOnly: boolean;
 };
 
-const Input = ({ inputTypeName, labelText, handlerSet, styled }: Props) => {
+const Input = ({
+  inputTypeName,
+  labelText,
+  handlerSet,
+  styled,
+  defaultValue,
+  readOnly = false,
+}: Props) => {
   return (
     <div id={inputTypeName} style={styled}>
       <label htmlFor={labelText}>
@@ -17,8 +26,10 @@ const Input = ({ inputTypeName, labelText, handlerSet, styled }: Props) => {
       <TextInput
         type={inputTypeName}
         id={labelText}
-        onChange={(e) => handlerSet(e.target.value)}
+        onChange={(e) => handlerSet!(e.target.value)}
         required
+        defaultValue={defaultValue as string}
+        readOnly={readOnly}
       />
     </div>
   );

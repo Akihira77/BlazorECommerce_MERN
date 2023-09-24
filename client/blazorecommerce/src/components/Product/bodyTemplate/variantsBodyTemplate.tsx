@@ -2,7 +2,7 @@ import { ProductType, VariantType } from "@/src/utils/types.js";
 import { DataScroller } from "primereact/datascroller";
 import { Tooltip } from "primereact/tooltip";
 
-const variantsBodyTemplate = (product: ProductType) => {
+const VariantsBodyTemplate = (product: ProductType) => {
   function currencyFormat(num: number) {
     return "$" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
@@ -36,4 +36,4 @@ const variantsBodyTemplate = (product: ProductType) => {
   );
 };
 
-export default variantsBodyTemplate;
+export default VariantsBodyTemplate;

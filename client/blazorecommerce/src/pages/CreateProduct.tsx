@@ -18,6 +18,7 @@ import useGetFromApi from "../hooks/useGetFromApi.tsx";
 import { CategoryResultType } from "../components/Category/type.ts";
 import { ProductTypeResultType } from "../components/ProductType/type.ts";
 import { Toast } from "primereact/toast";
+import { StatusCodes } from "../utils/constant.ts";
 
 type Props = {};
 
@@ -47,11 +48,15 @@ const CreateProduct = (props: Props) => {
     setVariants((prev) => [...prev.filter((item) => item.id != id)]);
   };
 
-  const show = () => {
+  const show = (
+    severity: "success" | "info" | "warn" | "error" | undefined,
+    summary: string,
+    detail: string
+  ) => {
     toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: "Product Type Saved",
+      severity,
+      summary,
+      detail,
     });
   };
 
@@ -67,7 +72,7 @@ const CreateProduct = (props: Props) => {
     setPrice(0);
     setOriginalPrice(0);
     setProductType(null);
-    show();
+    show("success", "Success", "Product Type Saved");
   };
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -84,8 +89,12 @@ const CreateProduct = (props: Props) => {
       category: category!,
     };
 
-    console.log(productData);
-    await postToApi("product", productData);
+    // console.log(productData);
+    const response = await postToApi("product", productData);
+    console.log(response);
+    if (response.data?.status == StatusCodes.Created201) {
+      show("success", "Success", response?.data?.data.msg);
+    }
   }
 
   const handleChangeCategory = (e: CascadeSelectChangeEvent) => {
@@ -115,12 +124,18 @@ const CreateProduct = (props: Props) => {
     <div className="container my-8 flex flex-col">
       <h2 className="font-bold mb-4 text-2xl">Create New Product</h2>
       <form className="flex flex-col gap-4" onSubmit={(e) => handleSubmit(e)}>
-        <Input handlerSet={setTitle} inputTypeName="text" labelText="Title" />
+        <Input
+          handlerSet={setTitle}
+          inputTypeName="text"
+          labelText="Title"
+          readOnly={false}
+        />
         <div>
           <Input
             handlerSet={setImageUrl}
             inputTypeName="text"
             labelText="Image"
+            readOnly={false}
           />
           {imageUrl && (
             <img

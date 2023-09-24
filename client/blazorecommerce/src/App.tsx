@@ -11,6 +11,7 @@ import ProductType from "./pages/ProductType.tsx";
 import Product from "./pages/Product.tsx";
 import CreateProduct from "./pages/CreateProduct.tsx";
 import EditProduct from "./pages/EditProduct.tsx";
+import DeleteProduct from "./pages/DeleteProduct.tsx";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
                 <Route index element={<Product />} />
                 <Route path="create" element={<CreateProduct />} />
                 <Route path="edit/:id" element={<EditProduct />} />
+                <Route path="delete/:id" element={<DeleteProduct />} />
               </Route>
             </Route>
             <Route path="/user" element={<UserList />} />

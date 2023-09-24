@@ -1,6 +1,6 @@
 import { ProductType } from "@/src/utils/types.js";
 
-const productBodyTemplate = (product: ProductType) => {
+const ProductBodyTemplate = (product: ProductType) => {
   return (
     <div className="flex justify-center flex-col">
       <img
@@ -13,4 +13,4 @@ const productBodyTemplate = (product: ProductType) => {
   );
 };
 
-export default productBodyTemplate;
+export default ProductBodyTemplate;

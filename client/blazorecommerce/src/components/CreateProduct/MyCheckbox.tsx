@@ -3,7 +3,7 @@ import React from "react";
 
 type Props = {
   defaultChecked: boolean;
-  handlerSet: React.Dispatch<React.SetStateAction<boolean>>;
+  handlerSet?: React.Dispatch<React.SetStateAction<boolean>>;
   htmlFor: string;
   labelText: string;
 };
@@ -19,7 +19,7 @@ const MyCheckbox = ({
       <Checkbox
         id={htmlFor}
         defaultChecked={defaultChecked}
-        onChange={(e) => handlerSet(Boolean(e.target.value))}
+        onChange={(e) => handlerSet!(Boolean(e.target.value))}
       />
       <Label htmlFor={htmlFor}>{labelText}</Label>
     </div>

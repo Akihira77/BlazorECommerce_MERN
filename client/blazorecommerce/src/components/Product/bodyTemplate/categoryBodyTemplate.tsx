@@ -1,7 +1,7 @@
 import { ProductType } from "@/src/utils/types.js";
 
-const categoryBodyTemplate = (product: ProductType) => {
+const CategoryBodyTemplate = (product: ProductType) => {
   return <p>{product.category.name}</p>;
 };
 
-export default categoryBodyTemplate;
+export default CategoryBodyTemplate;

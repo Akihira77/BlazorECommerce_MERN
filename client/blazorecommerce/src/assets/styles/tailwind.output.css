@@ -747,6 +747,10 @@ body {
   z-index: auto;
 }
 
+.m-0 {
+  margin: 0px;
+}
+
 .-mx-1 {
   margin-left: -0.25rem;
   margin-right: -0.25rem;
@@ -1050,6 +1054,10 @@ body {
   max-height: 90vh;
 }
 
+.w-1\/4 {
+  width: 25%;
+}
+
 .w-1\/5 {
   width: 20%;
 }
@@ -1149,6 +1157,10 @@ body {
 
 .w-full {
   width: 100%;
+}
+
+.w-\[50vw\] {
+  width: 50vw;
 }
 
 .max-w-2xl {
