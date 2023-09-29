@@ -13,72 +13,72 @@ import { Outlet, useNavigate } from "react-router-dom";
 type Props = {};
 
 const SidebarNav = (props: Props) => {
-  const [collapsed, setCollapsed] = useState(false);
-  const navigate = useNavigate();
+    const [collapsed, setCollapsed] = useState(false);
+    const navigate = useNavigate();
 
-  return (
-    <>
-      <div className="relavite flex w-[250px]">
-        <Sidebar
-          style={{
-            color: "rgb(139, 161, 183)",
-            borderRight: "2px solid #ddd",
-            minHeight: "90.8vh",
-          }}
-          breakPoint="lg"
-          collapsed={collapsed}
-          className="overflow-auto"
-        >
-          <Menu style={{ paddingTop: "1.5rem" }}>
-            <SubMenu icon={<IoStatsChart />} label="Charts">
-              <MenuItem>Pie charts</MenuItem>
-              <MenuItem> Line charts </MenuItem>
-            </SubMenu>
-            <MenuItem
-              icon={<RxDashboard />}
-              onClick={() => navigate("/admin/dashboard")}
-            >
-              <h4>Dashboard</h4>
-            </MenuItem>
-            <MenuItem
-              icon={<FaUsersGear />}
-              onClick={() => navigate("/admin/user")}
-            >
-              <h4>User</h4>
-            </MenuItem>
-            <MenuItem
-              icon={<HiOutlineClipboardDocumentCheck />}
-              onClick={() => navigate("/admin/order")}
-            >
-              <h4>Order</h4>
-            </MenuItem>
-            <MenuItem
-              icon={<MdOutlineCategory />}
-              onClick={() => navigate("/admin/category")}
-            >
-              <h4>Category</h4>
-            </MenuItem>
-            <MenuItem
-              icon={<LiaProductHunt />}
-              onClick={() => navigate("/admin/product-type")}
-            >
-              <h4>Product Type</h4>
-            </MenuItem>
-            <MenuItem
-              icon={<MdProductionQuantityLimits />}
-              onClick={() => navigate("/admin/product")}
-            >
-              <h4>Product</h4>
-            </MenuItem>
-            <MenuItem
-              icon={<AiOutlineLogin />}
-              onClick={() => navigate("/admin/log")}
-            >
-              <h4>Log</h4>
-            </MenuItem>
-          </Menu>
-        </Sidebar>
-        {/* <div
+    return (
+        <>
+            <div className="flex w-[250px]">
+                <Sidebar
+                    style={{
+                        color: "rgb(139, 161, 183)",
+                        borderRight: "2px solid #ddd",
+                        minHeight: "90.8vh",
+                    }}
+                    breakPoint="lg"
+                    collapsed={collapsed}
+                    className="overflow-auto"
+                >
+                    <Menu style={{ paddingTop: "1.5rem" }}>
+                        <SubMenu icon={<IoStatsChart />} label="Charts">
+                            <MenuItem>Pie charts</MenuItem>
+                            <MenuItem> Line charts </MenuItem>
+                        </SubMenu>
+                        <MenuItem
+                            icon={<RxDashboard />}
+                            onClick={() => navigate("/admin/dashboard")}
+                        >
+                            <h4>Dashboard</h4>
+                        </MenuItem>
+                        <MenuItem
+                            icon={<FaUsersGear />}
+                            onClick={() => navigate("/admin/user")}
+                        >
+                            <h4>User</h4>
+                        </MenuItem>
+                        <MenuItem
+                            icon={<HiOutlineClipboardDocumentCheck />}
+                            onClick={() => navigate("/admin/order")}
+                        >
+                            <h4>Order</h4>
+                        </MenuItem>
+                        <MenuItem
+                            icon={<MdOutlineCategory />}
+                            onClick={() => navigate("/admin/category")}
+                        >
+                            <h4>Category</h4>
+                        </MenuItem>
+                        <MenuItem
+                            icon={<LiaProductHunt />}
+                            onClick={() => navigate("/admin/product-type")}
+                        >
+                            <h4>Product Type</h4>
+                        </MenuItem>
+                        <MenuItem
+                            icon={<MdProductionQuantityLimits />}
+                            onClick={() => navigate("/admin/product")}
+                        >
+                            <h4>Product</h4>
+                        </MenuItem>
+                        <MenuItem
+                            icon={<AiOutlineLogin />}
+                            onClick={() => navigate("/admin/log")}
+                        >
+                            <h4>Log</h4>
+                        </MenuItem>
+                    </Menu>
+                </Sidebar>
+                {/* <div
         style={{ position: "absolute", zIndex: "3", right: "0", top: "10px" }}
       >
         <input
@@ -89,10 +89,10 @@ const SidebarNav = (props: Props) => {
           onClick={() => setCollapsed(!collapsed)}
         />
       </div> */}
-      </div>
-      <Outlet />
-    </>
-  );
+            </div>
+            <Outlet />
+        </>
+    );
 };
 
 export default SidebarNav;

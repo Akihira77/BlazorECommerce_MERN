@@ -1,122 +1,283 @@
 import {
-  CategoryType,
-  ProductTypesType,
-  VariantType,
+    CategoryType,
+    ProductTypesType,
+    VariantType,
 } from "@/src/utils/types.js";
-import { Button, Checkbox, Label } from "flowbite-react";
-import {
-  CascadeSelect,
-  CascadeSelectChangeEvent,
-} from "primereact/cascadeselect";
+import { Button, Checkbox, Label, Tooltip } from "flowbite-react";
+import { CascadeSelect } from "primereact/cascadeselect";
 import React from "react";
-import MyInputText from "./MyInputText.tsx";
+import { InputText } from "primereact/inputtext";
+import { BsFillTrashFill } from "react-icons/bs";
+import { AiOutlineCloudDownload } from "react-icons/ai";
+import { FiEdit } from "react-icons/fi";
+import { Toast } from "primereact/toast";
 
 type Props = {
-  variants: VariantType[];
-  productType: ProductTypesType | null;
-  setProductType: React.Dispatch<React.SetStateAction<ProductTypesType | null>>;
-  productTypes: ProductTypesType[];
-  category: CategoryType | null;
-  price: number;
-  setPrice: React.Dispatch<React.SetStateAction<number>>;
-  originalPrice: number;
-  setOriginalPrice: React.Dispatch<React.SetStateAction<number>>;
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  setDeleted: React.Dispatch<React.SetStateAction<boolean>>;
-  addingVariantData: () => void;
-  remove: (id: number) => void;
+    variants: VariantType[] | null;
+    setVariants: React.Dispatch<React.SetStateAction<VariantType[]>>;
+    productTypes: ProductTypesType[];
+    category: CategoryType;
+    addingVariantData: () => void;
+    createFlag: boolean;
 };
 
 const AddProductType = ({
-  variants,
-  productType,
-  setProductType,
-  productTypes,
-  category,
-  price,
-  setPrice,
-  originalPrice,
-  setOriginalPrice,
-  setDeleted,
-  setVisible,
-  addingVariantData,
-  remove,
+    variants,
+    setVariants,
+    productTypes,
+    category,
+    createFlag,
 }: Props) => {
-  return (
-    variants.length > 0 &&
-    variants.map((variant, index) => (
-      <div className="mt-2 flex gap-4 items-center" key={index}>
-        <span className="p-float-label">
-          <CascadeSelect
-            inputId="select-productType"
-            value={productType?.name ?? variant.productType?.name}
-            onChange={(e: CascadeSelectChangeEvent) => setProductType(e.value)}
-            options={productTypes.filter(
-              (productType) => productType.category._id == category?._id
+    const [variantData, setVariantData] = React.useState<VariantType>({
+        deleted: false,
+        visible: true,
+        originalPrice: 0,
+        price: 0,
+        productType: null,
+    });
+    const toast = React.useRef<Toast>(null);
+    const [editFlag, setEditFlag] = React.useState<boolean>(false);
+
+    const show = (
+        severity: "success" | "info" | "warn" | "error" | undefined,
+        summary: string,
+        detail: string
+    ) => {
+        toast.current?.show({
+            severity,
+            summary,
+            detail,
+        });
+    };
+    function handleEdit(variant: VariantType) {
+        setEditFlag(true);
+
+        setVariants((prev) => [
+            ...prev.filter(
+                (v) => v.productType?.name != variant.productType?.name
+            ),
+        ]);
+        setVariantData(variant);
+    }
+
+    function handleSave(): void {
+        const check = variants?.find(
+            (v) => v.productType?.name == variantData?.productType?.name
+        );
+
+        if (check) {
+            show("error", "Error", "Product cannot have two same product type");
+            return;
+        }
+
+        setVariants((prev) => [...prev, variantData!]);
+        setVariantData({
+            deleted: false,
+            visible: true,
+            originalPrice: 0,
+            price: 0,
+            productType: null,
+        });
+        if (editFlag) {
+            show("success", "Success", "Success Editing");
+            setEditFlag(false);
+            return;
+        }
+        show("success", "Success", "Success Adding");
+    }
+
+    function cancel(): void {
+        setVariantData(null);
+    }
+
+    function remove(variant: VariantType): void {
+        setVariants((prev) => [
+            ...prev.filter(
+                (v) => v.productType?.name != variant.productType?.name
+            ),
+        ]);
+    }
+
+    console.log(variants, productTypes);
+    return (
+        <>
+            <Toast ref={toast} />
+            <div className="mt-3">
+                {variants &&
+                    variants.map((variant, index) => (
+                        <div
+                            className="flex gap-6 items-center mb-8"
+                            key={index}
+                        >
+                            <span className="p-float-label">
+                                <InputText
+                                    id="productType"
+                                    type="text"
+                                    value={String(variant.productType?.name)}
+                                    readOnly={true}
+                                />
+                                <label htmlFor="productType">
+                                    Product Type
+                                </label>
+                            </span>
+                            <span className="p-float-label">
+                                <InputText
+                                    id="price"
+                                    type="number"
+                                    value={String(variant.price)}
+                                    readOnly={true}
+                                />
+                                <label htmlFor="price">Price</label>
+                            </span>
+                            <span className="p-float-label">
+                                <InputText
+                                    id="original-price"
+                                    type="number"
+                                    value={String(variant.originalPrice)}
+                                    readOnly={true}
+                                />
+                                <label htmlFor="original-price">
+                                    Original Price
+                                </label>
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <Checkbox
+                                    id="visible"
+                                    defaultChecked={variant?.visible}
+                                    disabled
+                                />
+                                <Label htmlFor="visible">Visible</Label>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Checkbox
+                                    id="deleted"
+                                    defaultChecked={variant?.deleted}
+                                    disabled
+                                />
+                                <Label htmlFor="deleted">Deleted</Label>
+                            </div>
+
+                            {/* Actions */}
+                            <Tooltip content="Edit">
+                                <Button
+                                    gradientDuoTone="purpleToBlue"
+                                    outline
+                                    onClick={() => handleEdit(variant)}
+                                >
+                                    <FiEdit />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip content="Remove">
+                                <Button
+                                    gradientDuoTone="pinkToOrange"
+                                    outline
+                                    onClick={() => remove(variant)}
+                                >
+                                    <BsFillTrashFill />
+                                </Button>
+                            </Tooltip>
+                        </div>
+                    ))}
+            </div>
+            <hr className="-mt-6" />
+            {createFlag && (
+                <div className="flex gap-6 items-center mt-3">
+                    <CascadeSelect
+                        optionGroupChildren={[]}
+                        optionLabel="name"
+                        options={productTypes.filter(
+                            (pt) => pt.category?.name == category?.name
+                        )}
+                        onChange={(e) =>
+                            setVariantData((prev) => ({
+                                ...prev,
+                                productType: e.value,
+                            }))
+                        }
+                        value={variantData.productType?.name}
+                        placeholder="Select Product Type"
+                    />
+                    <span className="p-float-label">
+                        <InputText
+                            id="price"
+                            type="number"
+                            value={String(variantData.price)}
+                            onChange={(e) =>
+                                setVariantData((prev) => ({
+                                    ...prev,
+                                    price: Number(e.target.value),
+                                }))
+                            }
+                            min={0}
+                        />
+                        <label htmlFor="price">Price</label>
+                    </span>
+                    <span className="p-float-label">
+                        <InputText
+                            id="original-price"
+                            type="number"
+                            value={String(variantData.originalPrice)}
+                            onChange={(e) =>
+                                setVariantData((prev) => ({
+                                    ...prev,
+                                    originalPrice: Number(e.target.value),
+                                }))
+                            }
+                            min={0}
+                        />
+                        <label htmlFor="original-price">Original Price</label>
+                    </span>
+                    <div className="flex items-center gap-2">
+                        <Checkbox
+                            id="visible"
+                            checked={variantData.visible}
+                            onChange={(e) =>
+                                setVariantData((prev) => ({
+                                    ...prev,
+                                    visible: Boolean(e.target.value),
+                                }))
+                            }
+                        />
+                        <Label htmlFor="visible">Visible</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Checkbox
+                            id="deleted"
+                            checked={variantData.deleted}
+                            onChange={(e) =>
+                                setVariantData((prev) => ({
+                                    ...prev,
+                                    deleted: Boolean(e.target.value),
+                                }))
+                            }
+                        />
+                        <Label htmlFor="deleted">Deleted</Label>
+                    </div>
+
+                    {/* Actions */}
+                    <Tooltip content="Save">
+                        <Button
+                            gradientDuoTone="greenToBlue"
+                            outline
+                            onClick={handleSave}
+                        >
+                            <AiOutlineCloudDownload />
+                        </Button>
+                    </Tooltip>
+
+                    <Tooltip content="Cancel">
+                        <Button
+                            gradientDuoTone="pinkToOrange"
+                            outline
+                            onClick={cancel}
+                        >
+                            <BsFillTrashFill />
+                        </Button>
+                    </Tooltip>
+                </div>
             )}
-            optionLabel="name"
-            optionGroupChildren={[]}
-            className="w-60"
-          ></CascadeSelect>
-          <label htmlFor="select-productType">Product Type</label>
-        </span>
-        <span className="p-float-label">
-          <MyInputText
-            data={variant}
-            optionValue={price}
-            setFn={setPrice}
-            htmlFor="product-price"
-            inputType="number"
-            labelText="Price"
-          />
-        </span>
-        <span className="p-float-label">
-          <MyInputText
-            data={variant}
-            optionValue={originalPrice}
-            setFn={setOriginalPrice}
-            htmlFor="product-original-price"
-            inputType="number"
-            labelText="Original Price"
-          />
-        </span>
-        <div className="status flex flex-col justify-center">
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="visible"
-              defaultChecked={variant.visible}
-              onChange={(e) => setVisible(Boolean(e.target.value))}
-            />
-            <Label htmlFor="visible">Visible</Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="visible"
-              defaultChecked={variant.deleted}
-              onChange={(e) => setDeleted(Boolean(e.target.value))}
-            />
-            <Label htmlFor="visible">Deleted</Label>
-          </div>
-        </div>
-        <Button
-          type="button"
-          onClick={addingVariantData}
-          gradientDuoTone="purpleToBlue"
-          outline
-        >
-          Save
-        </Button>
-        <Button
-          type="button"
-          onClick={() => remove(variant.id!)}
-          gradientDuoTone="pinkToOrange"
-          outline
-        >
-          Remove
-        </Button>
-      </div>
-    ))
-  );
+        </>
+    );
 };
 
 export default AddProductType;

@@ -1,247 +1,257 @@
-import { Button, Label, Textarea } from "flowbite-react";
+import { Button, Checkbox, Label, TextInput, Textarea } from "flowbite-react";
 import {
-  CascadeSelect,
-  CascadeSelectChangeEvent,
+    CascadeSelect,
+    CascadeSelectChangeEvent,
 } from "primereact/cascadeselect";
 import React from "react";
 import {
-  CategoryType,
-  ProductType,
-  ProductTypesType,
-  VariantType,
+    CategoryType,
+    ProductType,
+    ProductTypesType,
+    ProductVariantsType,
+    VariantType,
 } from "../utils/types";
-import Input from "../components/Input.tsx";
 import AddProductType from "../components/CreateProduct/AddProductType.tsx";
-import MyCheckbox from "../components/CreateProduct/MyCheckbox.tsx";
 import { postToApi } from "../utils/axiosCommand.ts";
 import useGetFromApi from "../hooks/useGetFromApi.tsx";
 import { CategoryResultType } from "../components/Category/type.ts";
 import { ProductTypeResultType } from "../components/ProductType/type.ts";
 import { Toast } from "primereact/toast";
 import { StatusCodes } from "../utils/constant.ts";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const CreateProduct = (props: Props) => {
-  const toast = React.useRef<Toast>(null);
-  const [category, setCategory] = React.useState<CategoryType | null>(null);
-  const [productType, setProductType] = React.useState<ProductTypesType | null>(
-    null
-  );
-  const [variants, setVariants] = React.useState<VariantType[]>([]);
-  const [price, setPrice] = React.useState<number>(0);
-  const [originalPrice, setOriginalPrice] = React.useState<number>(0);
-  const [visible, setVisible] = React.useState<boolean>(true);
-  const [deleted, setDeleted] = React.useState<boolean>(false);
-  const [title, setTitle] = React.useState<string>("");
-  const [description, setDescription] = React.useState<string>("");
-  const [imageUrl, setImageUrl] = React.useState<string>("");
-  const [productFeatured, setProductFeatured] = React.useState<boolean>(false);
-  const [productVisible, setProductVisible] = React.useState<boolean>(true);
-  const [productDeleted, setProductDeleted] = React.useState<boolean>(false);
-  const [categories, setCategories] = React.useState<CategoryType[]>([]);
-  const [productTypes, setProductTypes] = React.useState<ProductTypesType[]>(
-    []
-  );
+    const toast = React.useRef<Toast>(null);
+    const [categories, setCategories] = React.useState<CategoryType[]>([]);
+    const [productTypes, setProductTypes] = React.useState<ProductTypesType[]>(
+        []
+    );
+    const [productVariants, setProductVariants] =
+        React.useState<ProductVariantsType>({
+            title: "",
+            description: "",
+            imageUrl: "",
+            visible: true,
+            featured: false,
+            deleted: false,
+            category: null,
+            variants: null,
+        });
+    const [variants, setVariants] = React.useState<VariantType[]>([]);
+    const [createFlag, setCreateFlag] = React.useState<boolean>(false);
+    const navigate = useNavigate();
 
-  const remove = (id: number) => {
-    setVariants((prev) => [...prev.filter((item) => item.id != id)]);
-  };
-
-  const show = (
-    severity: "success" | "info" | "warn" | "error" | undefined,
-    summary: string,
-    detail: string
-  ) => {
-    toast.current?.show({
-      severity,
-      summary,
-      detail,
-    });
-  };
-
-  const addingVariantData = () => {
-    const variant = {
-      productType: productType!,
-      price,
-      originalPrice,
-      visible,
-      deleted,
-    };
-    setVariants((prev) => [variant, ...prev.slice(1)]);
-    setPrice(0);
-    setOriginalPrice(0);
-    setProductType(null);
-    show("success", "Success", "Product Type Saved");
-  };
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const productData: ProductType = {
-      title,
-      imageUrl,
-      description,
-      deleted: productDeleted,
-      featured: productFeatured,
-      variants: variants,
-      visible: productVisible,
-      category: category!,
+    const show = (
+        severity: "success" | "info" | "warn" | "error" | undefined,
+        summary: string,
+        detail: string
+    ) => {
+        toast.current?.show({
+            severity,
+            summary,
+            detail,
+        });
     };
 
-    // console.log(productData);
-    const response = await postToApi("product", productData);
-    console.log(response);
-    if (response.data?.status == StatusCodes.Created201) {
-      show("success", "Success", response?.data?.data.msg);
+    const addingVariantData = () => {
+        show("success", "Success", "Product Type Saved");
+    };
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        const productData: ProductType = {
+            title: productVariants.title,
+            imageUrl: productVariants.imageUrl,
+            description: productVariants.description,
+            deleted: productVariants.deleted,
+            featured: productVariants.featured,
+            variants: variants,
+            visible: productVariants.visible,
+            category: productVariants.category!,
+        };
+
+        console.log(productData);
+        const response = await postToApi("product", productData);
+        // console.log(response);
+        if (response.data?.status == StatusCodes.Created201) {
+            show("success", "Success", response?.data?.data.msg);
+            navigate("/admin/product", { replace: true });
+        }
     }
-  }
 
-  const handleChangeCategory = (e: CascadeSelectChangeEvent) => {
-    setVariants([]);
-    setPrice(0);
-    setOriginalPrice(0);
-    setProductType(null);
-    setCategory(e.value);
-  };
+    const handleChangeCategory = (e: CascadeSelectChangeEvent) => {
+        setProductVariants({
+            ...productVariants,
+            category: e.value,
+        });
+    };
 
-  const categoriesFromBackend =
-    useGetFromApi<CategoryResultType>("category")?.categories;
-  const productTypeFromBackend =
-    useGetFromApi<ProductTypeResultType>("product-type")?.productTypes;
+    const categoriesFromBackend =
+        useGetFromApi<CategoryResultType>("category")?.categories;
+    const productTypeFromBackend =
+        useGetFromApi<ProductTypeResultType>("product-type")?.productTypes;
 
-  React.useEffect(() => {
-    if (categoriesFromBackend) {
-      setCategories(categoriesFromBackend);
-    }
+    React.useEffect(() => {
+        if (categoriesFromBackend) {
+            setCategories(categoriesFromBackend);
+        }
 
-    if (productTypeFromBackend) {
-      setProductTypes(productTypeFromBackend);
-    }
-  }, [categoriesFromBackend, productTypeFromBackend]);
+        if (productTypeFromBackend) {
+            setProductTypes(productTypeFromBackend);
+        }
+    }, [categoriesFromBackend, productTypeFromBackend]);
 
-  return (
-    <div className="container my-8 flex flex-col">
-      <h2 className="font-bold mb-4 text-2xl">Create New Product</h2>
-      <form className="flex flex-col gap-4" onSubmit={(e) => handleSubmit(e)}>
-        <Input
-          handlerSet={setTitle}
-          inputTypeName="text"
-          labelText="Title"
-          readOnly={false}
-        />
-        <div>
-          <Input
-            handlerSet={setImageUrl}
-            inputTypeName="text"
-            labelText="Image"
-            readOnly={false}
-          />
-          {imageUrl && (
-            <img
-              alt="product"
-              src={imageUrl}
-              className="mt-6 max-w-[200px] mx-auto"
-            />
-          )}
+    // console.log(productVariants);
+    return (
+        <div className="container my-8 flex flex-col">
+            <h2 className="font-bold mb-4 text-2xl">Create New Product</h2>
+            <form
+                className="flex flex-col gap-4"
+                onSubmit={(e) => handleSubmit(e)}
+            >
+                <div>
+                    <label htmlFor="title">Title</label>
+                    <TextInput
+                        type="text"
+                        id="title"
+                        onChange={(e) =>
+                            setProductVariants({
+                                ...productVariants,
+                                title: e.target.value,
+                            })
+                        }
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="imageUrl">Image</label>
+                    <TextInput
+                        type="text"
+                        id="imageUrl"
+                        onChange={(e) =>
+                            setProductVariants({
+                                ...productVariants,
+                                imageUrl: e.target.value,
+                            })
+                        }
+                        required
+                    />
+                    {productVariants.imageUrl && (
+                        <img
+                            alt="product"
+                            src={productVariants.imageUrl}
+                            className="mt-6 max-w-[200px] mx-auto"
+                        />
+                    )}
+                </div>
+                <div>
+                    <div className="mb-2 block">
+                        <Label htmlFor="description" value="Description" />
+                    </div>
+                    <Textarea
+                        id="description"
+                        placeholder="Product description..."
+                        required
+                        rows={4}
+                        className="p-2 rounded-md"
+                        onChange={(e) =>
+                            setProductVariants({
+                                ...productVariants,
+                                description: e.target.value,
+                            })
+                        }
+                    />
+                </div>
+                <div className="mt-2">
+                    <span className="p-float-label">
+                        <CascadeSelect
+                            inputId="select-category"
+                            value={productVariants.category}
+                            onChange={(e: CascadeSelectChangeEvent) =>
+                                handleChangeCategory(e)
+                            }
+                            options={categories}
+                            optionLabel="name"
+                            optionGroupChildren={[]}
+                            className="md:w-20rem w-full"
+                        ></CascadeSelect>
+                        <label htmlFor="select-category">Category</label>
+                    </span>
+                </div>
+
+                {/* Toast after insert Product Type/Variant Product */}
+                <Toast ref={toast} />
+
+                <AddProductType
+                    variants={variants}
+                    setVariants={setVariants}
+                    addingVariantData={addingVariantData}
+                    category={productVariants.category!}
+                    productTypes={productTypes}
+                    createFlag={createFlag}
+                />
+                {productVariants.category && !createFlag && (
+                    <Button
+                        onClick={() => setCreateFlag(true)}
+                        gradientDuoTone="purpleToBlue"
+                        outline
+                    >
+                        Add Product Type
+                    </Button>
+                )}
+                <div className="flex items-center gap-2">
+                    <Checkbox
+                        id="featured"
+                        defaultChecked={productVariants.featured}
+                        onChange={(e) =>
+                            setProductVariants({
+                                ...productVariants,
+                                featured: Boolean(e.target.value),
+                            })
+                        }
+                    />
+                    <Label htmlFor="featured">Featured</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Checkbox
+                        id="visible"
+                        defaultChecked={productVariants.visible}
+                        onChange={(e) =>
+                            setProductVariants({
+                                ...productVariants,
+                                visible: Boolean(e.target.value),
+                            })
+                        }
+                    />
+                    <Label htmlFor="visible">Visible</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Checkbox
+                        id="deleted"
+                        defaultChecked={productVariants.deleted}
+                        onChange={(e) =>
+                            setProductVariants({
+                                ...productVariants,
+                                deleted: Boolean(e.target.value),
+                            })
+                        }
+                    />
+                    <Label htmlFor="deleted">Deleted</Label>
+                </div>
+                <Button
+                    className="mt-4"
+                    type="submit"
+                    gradientDuoTone="greenToBlue"
+                    outline
+                >
+                    Submit
+                </Button>
+            </form>
         </div>
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="description" value="Description" />
-          </div>
-          <Textarea
-            id="description"
-            placeholder="Product description..."
-            required
-            rows={4}
-            className="p-2 rounded-md"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        <div className="mt-2">
-          <span className="p-float-label">
-            <CascadeSelect
-              inputId="select-category"
-              value={category}
-              onChange={(e: CascadeSelectChangeEvent) =>
-                handleChangeCategory(e)
-              }
-              options={categories}
-              optionLabel="name"
-              optionGroupChildren={[]}
-              className="md:w-20rem w-full"
-            ></CascadeSelect>
-            <label htmlFor="select-category">Category</label>
-          </span>
-        </div>
-        {category && (
-          <Button
-            onClick={() =>
-              setVariants([
-                {
-                  id: variants.length + 1,
-                  deleted: false,
-                  price: 0,
-                  originalPrice: 0,
-                  productType: productType!,
-                  visible: true,
-                },
-                ...variants,
-              ])
-            }
-            gradientDuoTone="purpleToBlue"
-            outline
-          >
-            Add Product Type
-          </Button>
-        )}
-        {/* Toast after insert Product Type/Variant Product */}
-        <Toast ref={toast} />
-
-        <AddProductType
-          category={category}
-          addingVariantData={addingVariantData}
-          originalPrice={originalPrice}
-          price={price}
-          productType={productType}
-          productTypes={productTypes}
-          setDeleted={setDeleted}
-          setOriginalPrice={setOriginalPrice}
-          setPrice={setPrice}
-          setProductType={setProductType}
-          setVisible={setVisible}
-          variants={variants}
-          remove={remove}
-        />
-        <MyCheckbox
-          defaultChecked={productFeatured}
-          handlerSet={setProductFeatured}
-          htmlFor="Featured"
-          labelText="Featured"
-        />
-        <MyCheckbox
-          defaultChecked={productVisible}
-          handlerSet={setProductVisible}
-          htmlFor="Visible"
-          labelText="Visible"
-        />
-        <MyCheckbox
-          defaultChecked={productDeleted}
-          handlerSet={setProductDeleted}
-          htmlFor="Deleted"
-          labelText="Deleted"
-        />
-        <Button
-          className="mt-4"
-          type="submit"
-          gradientDuoTone="greenToBlue"
-          outline
-        >
-          Submit
-        </Button>
-      </form>
-    </div>
-  );
+    );
 };
 
 export default CreateProduct;
