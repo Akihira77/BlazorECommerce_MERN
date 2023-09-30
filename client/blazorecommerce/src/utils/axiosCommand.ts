@@ -20,12 +20,20 @@ const getFromApi = async (url: string): Promise<ApiResponse> => {
     }
 };
 
-const postToApi = async (url: string, data: object): Promise<ApiResponse> => {
+const postToApi = async (
+    url: string,
+    data: object,
+    token: string = "Missing Token"
+): Promise<ApiResponse> => {
     try {
-        const response = await axios.post(`${api_url}/${url}`, data);
+        const response = await axios.post(`${api_url}/${url}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
         const result: SuccessResponse = {
-            data: response,
+            data: response.data,
             success: true,
         };
 
@@ -36,10 +44,18 @@ const postToApi = async (url: string, data: object): Promise<ApiResponse> => {
     }
 };
 
-const deleteToApi = async (url: string, id: string): Promise<ApiResponse> => {
+const deleteToApi = async (
+    url: string,
+    id: string,
+    token: string = "Missing Token"
+): Promise<ApiResponse> => {
     let result: ApiResponse;
     try {
-        const response = await axios.delete(`${api_url}/${url}/${id}`);
+        const response = await axios.delete(`${api_url}/${url}/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
         if (response.status === StatusCodes.Ok200) {
             result = {
@@ -62,10 +78,15 @@ const deleteToApi = async (url: string, id: string): Promise<ApiResponse> => {
 const putToApi = async (
     url: string,
     id: string,
-    data: object
+    data: object,
+    token: string = "Missing Token"
 ): Promise<ApiResponse> => {
     try {
-        const response = await axios.put(`${api_url}/${url}/${id}`, data);
+        const response = await axios.put(`${api_url}/${url}/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         let result: ApiResponse = {
             msg: response.data,
             statusCode: response.status,

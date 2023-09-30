@@ -10,7 +10,6 @@ import CategoryBodyTemplate from "../components/Product/bodyTemplate/CategoryBod
 import VariantsBodyTemplate from "../components/Product/bodyTemplate/VariantsBodyTemplate.tsx";
 import StatusBodyTemplate from "../components/Product/bodyTemplate/StatusBodyTemplate.tsx";
 import ActionsBodyTemplate from "../components/Product/bodyTemplate/ActionsBodyTemplate.tsx";
-import { ScrollPanel } from "primereact/scrollpanel";
 
 type Props = {};
 

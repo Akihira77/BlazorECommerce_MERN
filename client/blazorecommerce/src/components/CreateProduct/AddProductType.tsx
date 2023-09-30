@@ -87,7 +87,13 @@ const AddProductType = ({
     }
 
     function cancel(): void {
-        setVariantData(null);
+        setVariantData({
+            deleted: false,
+            visible: true,
+            originalPrice: 0,
+            price: 0,
+            productType: null,
+        });
     }
 
     function remove(variant: VariantType): void {
@@ -98,7 +104,6 @@ const AddProductType = ({
         ]);
     }
 
-    console.log(variants, productTypes);
     return (
         <>
             <Toast ref={toast} />

@@ -19,6 +19,14 @@ class CategoryService extends BaseService<ICategoryModel> {
     ): Promise<ICategoryModel[]> {
         return await this.model.find(query);
     }
+
+    async setDeletedFlag(id: string): Promise<ICategoryModel | null> {
+        return await this.model.findByIdAndUpdate(
+            id,
+            { deleted: true },
+            { new: true }
+        );
+    }
 }
 
 export default new CategoryService(categoryModel);

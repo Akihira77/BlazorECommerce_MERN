@@ -2,14 +2,21 @@ import React, { useState } from "react";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { FiTrash } from "react-icons/fi";
 import { deleteToApi } from "../../utils/axiosCommand.ts";
-import { CategoryType, SuccessResponse } from "@/src/utils/types.js";
+import {
+    CategoryType,
+    ErrorResponse,
+    SuccessResponse,
+    ToastType,
+} from "@/src/utils/types.js";
 import { Toast } from "primereact/toast";
+import { StatusCodes } from "../../utils/constant.ts";
 
 type Props = {
     categoryId: string | null;
     categoryName: string | null;
     categoryUrl: string | null;
     setCategories: React.Dispatch<React.SetStateAction<CategoryType[]>>;
+    token: string;
 };
 
 const DeleteCategory = ({
@@ -17,15 +24,12 @@ const DeleteCategory = ({
     categoryName,
     categoryUrl,
     setCategories,
+    token,
 }: Props) => {
     const toast = React.useRef<Toast>(null);
     const [openModal, setOpenModal] = useState<string | undefined>();
 
-    const show = (
-        severity: "success" | "info" | "warn" | "error" | undefined,
-        summary: string,
-        detail: string
-    ) => {
+    const show = (severity: ToastType, summary: string, detail: string) => {
         toast.current?.show({
             severity,
             summary,
@@ -36,16 +40,19 @@ const DeleteCategory = ({
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const response = await deleteToApi("category", categoryId!);
+        const response = await deleteToApi("category", categoryId!, token);
         const successResponse = response as SuccessResponse;
+        const errorResponse = response as ErrorResponse;
 
-        if ("categories" in successResponse.data) {
-            setCategories(successResponse.data);
+        console.log(response);
+        if (errorResponse.statusCode == StatusCodes.Unauthorized401) {
+            show("error", "Error", errorResponse.msg);
+        } else {
+            setCategories(successResponse.data.categories);
+            // window.location.reload();
             setOpenModal(undefined);
             return;
         }
-
-        show("error", "Error", successResponse.data.msg);
     }
 
     return (

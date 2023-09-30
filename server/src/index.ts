@@ -11,20 +11,35 @@ import errorHandlerMiddleware from "./middlewares/error-handler.middleware.js";
 import productTypeRoute from "./routes/productType.route.js";
 import addressRoute from "./routes/address.route.js";
 import userRoute from "./routes/user.route.js";
+import {
+    seedDataCategory,
+    seedDataProduct,
+    seedDataProductType,
+    seedDataUser,
+} from "./utils/seed-data.js";
 
 const app: Application = express();
 
 //! Middleware
 app.use(
-  cors({
-    origin: "http://localhost:5173",
-  })
+    cors({
+        origin: "http://localhost:5173",
+    })
 );
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //! Routes
+app.post("/api/v1/seeding-data", async (req, res) => {
+    await seedDataUser();
+    await seedDataCategory();
+    await seedDataProductType();
+    await seedDataProduct();
+
+    res.status(201).send({ msg: "Seeding Data success" });
+    return;
+});
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/product-type", productTypeRoute);
@@ -36,16 +51,16 @@ app.use(errorHandlerMiddleware);
 
 //! NotFound Route
 app.get("/*", (req, res) => {
-  return res
-    .status(StatusCodes.NotFound404)
-    .send({ msg: "Route does not match anything in the server" });
+    return res
+        .status(StatusCodes.NotFound404)
+        .send({ msg: "Route does not match anything in the server" });
 });
 
 const startServer = async () => {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
-  });
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`Server is listening on port ${PORT}`);
+    });
 };
 
 connectDB().then(() => startServer());

@@ -5,19 +5,16 @@ import { IRequestExtends } from "../utils/express-extends.js";
 
 const productRoute: Router = express();
 
-const setAuthMid = (req: IRequestExtends, res: Response, next: NextFunction) =>
-    authMiddleware(req, res, next);
-
 productRoute.get("/", productController.getAllPopulateVariant);
-productRoute.post("/", setAuthMid, productController.add);
+productRoute.post("/", authMiddleware, productController.add);
 
 productRoute.get("/:id", productController.getById);
-productRoute.delete("/:id", setAuthMid, productController.remove);
-productRoute.put("/:id", setAuthMid, productController.update);
+productRoute.delete("/:id", authMiddleware, productController.remove);
+productRoute.put("/:id", authMiddleware, productController.update);
 
 productRoute.post(
     "/add-variant",
-    setAuthMid,
+    authMiddleware,
     productController.addVariantToProduct
 );
 

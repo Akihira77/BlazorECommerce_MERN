@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import { StatusCodes } from "../utils/constant.js";
 import categoryService from "../services/category.service.js";
 import productTypeService from "../services/productType.service.js";
+import { IUserDTO } from "../models/user.model.js";
+import { checkRole } from "../utils/check-role.js";
+import { UnauthenticatedError } from "../errors/index.error.js";
+import { IRequestExtends } from "../utils/express-extends.js";
 
 const getAndMap = async (): Promise<unknown> => {
     const categories = await categoryService.getAllAsync();
@@ -58,15 +62,31 @@ const search = async (req: Request, res: Response): Promise<void> => {
     return;
 };
 
-const add = async (req: Request, res: Response): Promise<void> => {
-    await categoryService.addAsync(req.body);
+const add = async (req: IRequestExtends, res: Response): Promise<void> => {
+    const user = req.user!;
+    if (checkRole(user.role, "user")) {
+        throw new UnauthenticatedError(
+            "User does not have the right permission"
+        );
+    }
+
+    const { name, url } = req.body;
+    await categoryService.addAsync({ name, url });
 
     res.status(StatusCodes.Created201).send({ categories: await getAndMap() });
 
     return;
 };
 
-const remove = async (req: Request, res: Response): Promise<void> => {
+const remove = async (req: IRequestExtends, res: Response): Promise<void> => {
+    const user = req.user!;
+
+    if (!checkRole(user.role, "admin")) {
+        throw new UnauthenticatedError(
+            "User does not have the right permission"
+        );
+    }
+
     const category = await categoryService.getByIdAsync(req.params.id);
 
     if (!category) {
@@ -76,24 +96,31 @@ const remove = async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
-    const productTypes = await productTypeService.getByCategoryId(category.id);
+    // const productTypes = await productTypeService.getByCategoryId(category.id);
 
-    if (productTypes) {
-        res.status(StatusCodes.Ok200).send({
-            msg: "This Category still have relations with Product Type. Remove them before delete this category",
-        });
-        return;
-    }
+    // if (productTypes) {
+    //     res.status(StatusCodes.Ok200).send({
+    //         msg: "This Category still have relations with Product Type. Remove them before delete this category",
+    //     });
+    //     return;
+    // }
 
-    await categoryService.deleteAsync(req.params.id);
+    // await categoryService.deleteAsync(req.params.id);
+    await categoryService.setDeletedFlag(req.params.id);
 
     res.status(StatusCodes.Ok200).send({ categories: await getAndMap() });
 
     return;
 };
 
-const update = async (req: Request, res: Response): Promise<void> => {
-    console.log(req.body);
+const update = async (req: IRequestExtends, res: Response): Promise<void> => {
+    // console.log(req.body);
+    const user = req.user!;
+    if (!checkRole(user.role, "user")) {
+        throw new UnauthenticatedError(
+            "User does not have the right permission"
+        );
+    }
     await categoryService.updateAsync(req.params.id, req.body);
 
     res.status(StatusCodes.Ok200).send({ categories: await getAndMap() });

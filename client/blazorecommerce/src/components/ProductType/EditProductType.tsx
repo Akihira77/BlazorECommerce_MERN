@@ -2,31 +2,60 @@ import React, { useState } from "react";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { BsPencilSquare } from "react-icons/bs";
 import { putToApi } from "../../utils/axiosCommand.ts";
-import { ProductTypesType } from "@/src/utils/types.js";
+import {
+    ErrorResponse,
+    ProductTypesType,
+    SuccessResponse,
+    ToastType,
+} from "@/src/utils/types.js";
+import { Toast } from "primereact/toast";
 
 type Props = {
     productTypeId: string | null;
     productTypeName: string | null;
     productTypeCategory: string | null;
     setProductTypes: React.Dispatch<React.SetStateAction<ProductTypesType[]>>;
+    token: string;
 };
 const EditProductType = ({
     productTypeId,
     productTypeName,
     productTypeCategory,
     setProductTypes,
+    token,
 }: Props) => {
     const [openModal, setOpenModal] = useState<string | undefined>();
     const [name, setName] = useState(productTypeName);
+    const toast = React.useRef<Toast>(null);
+
+    const show = (severity: ToastType, summary: string, detail: string) => {
+        toast.current?.show({
+            severity,
+            summary,
+            detail,
+        });
+    };
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setOpenModal("true");
 
-        putToApi("product-type", productTypeId!, { name }).then((response) => {
+        const response = await putToApi(
+            "product-type",
+            productTypeId!,
+            { name },
+            token
+        );
+
+        const successResponse = response as SuccessResponse;
+        const errorResponse = response as ErrorResponse;
+
+        if (successResponse.success) {
             setOpenModal(undefined);
-            setProductTypes(response.data?.data.productTypes);
-        });
+            setProductTypes(successResponse.data.productTypes);
+        } else {
+            show("error", "Error", errorResponse.msg);
+        }
     }
 
     return (
@@ -79,6 +108,7 @@ const EditProductType = ({
                     </form>
                 </Modal.Body>
             </Modal>
+            <Toast ref={toast} />
         </>
     );
 };

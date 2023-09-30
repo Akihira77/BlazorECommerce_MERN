@@ -1,11 +1,17 @@
 import { Request, Response } from "express";
 import productService from "../services/product.service.js";
 import { StatusCodes } from "../utils/constant.js";
-import BadRequestError from "../errors/bad-request.js";
 import productVariantService from "../services/productVariant.service.js";
-import NotFoundError from "../errors/not-found.js";
 import productTypeService from "../services/productType.service.js";
 import { IProductModel } from "../models/product.model.js";
+import { IRequestExtends } from "../utils/express-extends.js";
+import { checkRole } from "../utils/check-role.js";
+import {
+    BadRequestError,
+    NotFoundError,
+    UnauthenticatedError,
+} from "../errors/index.error.js";
+import { ICategoryModel } from "../models/category.model.js";
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
     const products = await productService.getAllAsync();
@@ -24,16 +30,24 @@ const getAllPopulateVariant = async (
     return;
 };
 
-const add = async (req: Request, res: Response): Promise<void> => {
+const add = async (req: IRequestExtends, res: Response): Promise<void> => {
+    const user = req.user!;
+    if (checkRole(user.role, "user")) {
+        throw new UnauthenticatedError(
+            "User does not have the right permission"
+        );
+    }
+
     const {
-        // title,
-        // description,
-        // imageUrl,
-        // category,
-        // featured,
-        // visible,
-        // deleted,
         variants,
+        description,
+        category,
+        _id,
+        title,
+        imageUrl,
+        visible,
+        deleted,
+        featured,
     } = req.body;
 
     const variantsTemp = variants.map((variant: Record<string, any>) => ({
@@ -49,19 +63,17 @@ const add = async (req: Request, res: Response): Promise<void> => {
     );
 
     req.body.variants = Object.values(savedVariants);
-
-    // const request = {
-    //     title,
-    //     description,
-    //     imageUrl,
-    //     category,
-    //     featured,
-    //     visible,
-    //     deleted,
-    //     variants: Object.values(savedVariants),
-    // };
-
-    await productService.addAsync(req.body);
+    const request = {
+        title,
+        description,
+        imageUrl,
+        deleted,
+        featured,
+        visible,
+        category,
+        variants: req.body.variants,
+    };
+    await productService.addAsync(request);
 
     res.status(StatusCodes.Created201).send({
         msg: "Creating product success",
@@ -103,7 +115,13 @@ const getById = async (req: Request, res: Response) => {
     return;
 };
 
-const remove = async (req: Request, res: Response) => {
+const remove = async (req: IRequestExtends, res: Response) => {
+    const user = req.user!;
+    if (!checkRole(user.role, "admin")) {
+        throw new UnauthenticatedError(
+            "User does not have the right permission"
+        );
+    }
     const product: IProductModel | null = await productService.getByIdAsync(
         req.params.id
     );
@@ -128,7 +146,14 @@ const remove = async (req: Request, res: Response) => {
     return;
 };
 
-const update = async (req: Request, res: Response) => {
+const update = async (req: IRequestExtends, res: Response) => {
+    const user = req.user!;
+    if (checkRole(user.role, "user")) {
+        throw new UnauthenticatedError(
+            "User does not have the right permission"
+        );
+    }
+
     const product = await productService.getByIdAsync(req.params.id);
 
     if (!product) {
@@ -137,7 +162,17 @@ const update = async (req: Request, res: Response) => {
 
     await productVariantService.removeProductVariants(product?.variants);
 
-    const { variants } = req.body;
+    const {
+        variants,
+        description,
+        category,
+        _id,
+        title,
+        imageUrl,
+        visible,
+        deleted,
+        featured,
+    } = req.body;
     const variantsTemp = variants.map((variant: Record<string, any>) => ({
         productType: variant.productType._id,
         price: variant.price,
@@ -151,9 +186,20 @@ const update = async (req: Request, res: Response) => {
     );
 
     req.body.variants = Object.values(savedVariants);
-    console.log(req.body);
     await productService.addVariantForProduct(req.params.id, req.body.variants);
-    const result = await productService.updateAsync(req.params.id, req.body);
+
+    const request = {
+        _id,
+        title,
+        description,
+        imageUrl,
+        deleted,
+        featured,
+        visible,
+        category,
+        variants: req.body.variants,
+    };
+    const result = await productService.updateAsync(req.params.id, request);
 
     // console.log(result);
     res.status(StatusCodes.Ok200).send({

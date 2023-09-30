@@ -7,9 +7,10 @@ import DeleteProductType from "./DeleteProductType.tsx";
 type Props = {
     productTypes?: ProductTypesType[];
     setProductTypes: React.Dispatch<React.SetStateAction<ProductTypesType[]>>;
+    token: string;
 };
 
-const MainTable = ({ productTypes, setProductTypes }: Props) => {
+const MainTable = ({ productTypes, setProductTypes, token }: Props) => {
     return (
         <Table hoverable style={{ marginTop: "1rem" }}>
             <Table.Head>
@@ -38,6 +39,7 @@ const MainTable = ({ productTypes, setProductTypes }: Props) => {
                                         setProductTypes={setProductTypes}
                                         productTypeId={item._id}
                                         productTypeName={item.name}
+                                        token={token}
                                     />
                                 </div>
                                 <div>
@@ -46,6 +48,7 @@ const MainTable = ({ productTypes, setProductTypes }: Props) => {
                                         setProductTypes={setProductTypes}
                                         productTypeId={item._id}
                                         productTypeName={item.name}
+                                        token={token}
                                     />
                                 </div>
                             </Table.Cell>

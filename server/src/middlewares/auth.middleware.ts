@@ -37,7 +37,13 @@ const authMiddleware = async (
         );
         const user = await userService.getByIdExcludePassword(payload.userId);
 
-        req.user = user;
+        req.user = {
+            _id: payload.userId,
+            email: payload.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: payload.role,
+        };
         next();
         return;
     } catch (error) {

@@ -13,6 +13,7 @@ import { Toast } from "primereact/toast";
 import { StatusCodes } from "../utils/constant.ts";
 import { ErrorResponse } from "@/src/utils/types.ts";
 import { Dialog } from "primereact/dialog";
+import { useCookies } from "react-cookie";
 
 type Props = {};
 
@@ -23,6 +24,8 @@ const DeleteProduct = (props: Props) => {
     const data = useGetFromApi<ProductResultType>(`product/${params.id}`);
     const [product, setProduct] = React.useState<ProductType | null>(null);
     const [visible, setVisible] = React.useState<boolean>(false);
+    const [cookies, setCookies] = useCookies(["token"]);
+
     const footerContent = (
         <div className="flex gap-4 justify-end">
             <Button
@@ -42,29 +45,33 @@ const DeleteProduct = (props: Props) => {
     );
 
     async function handleDelete() {
-        const response = await deleteToApi("product", params.id!);
+        const response = await deleteToApi(
+            "product",
+            params.id!,
+            cookies.token
+        );
+        const successResponse = response as SuccessResponse;
+        const errorResponse = response as ErrorResponse;
 
         console.log(response);
-        if (
-            (response as ErrorResponse).statusCode === StatusCodes.NotFound404
-        ) {
+        if (successResponse.success) {
             toast.current?.show({
-                severity: "error",
-                summary: "Error",
-                detail: (response as ErrorResponse).msg,
+                severity: "success",
+                summary: "Success",
+                detail: successResponse.data.msg,
             });
-            return;
+
+            setTimeout(() => {
+                navigate("/admin/product", { replace: true });
+            }, 300);
         }
 
         toast.current?.show({
-            severity: "success",
-            summary: "Success",
-            detail: (response as SuccessResponse).data?.msg,
+            severity: "error",
+            summary: "Error",
+            detail: errorResponse.msg,
         });
-
-        setTimeout(() => {
-            navigate("/admin/product", { replace: true });
-        }, 300);
+        return;
     }
 
     React.useEffect(() => {

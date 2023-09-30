@@ -6,9 +6,11 @@ import {
 import React from "react";
 import {
     CategoryType,
+    ErrorResponse,
     ProductType,
     ProductTypesType,
     ProductVariantsType,
+    SuccessResponse,
     VariantType,
 } from "../utils/types";
 import AddProductType from "../components/CreateProduct/AddProductType.tsx";
@@ -17,8 +19,8 @@ import useGetFromApi from "../hooks/useGetFromApi.tsx";
 import { CategoryResultType } from "../components/Category/type.ts";
 import { ProductTypeResultType } from "../components/ProductType/type.ts";
 import { Toast } from "primereact/toast";
-import { StatusCodes } from "../utils/constant.ts";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 type Props = {};
 
@@ -42,6 +44,7 @@ const CreateProduct = (props: Props) => {
     const [variants, setVariants] = React.useState<VariantType[]>([]);
     const [createFlag, setCreateFlag] = React.useState<boolean>(false);
     const navigate = useNavigate();
+    const [cookies, setCookies] = useCookies(["token"]);
 
     const show = (
         severity: "success" | "info" | "warn" | "error" | undefined,
@@ -73,12 +76,16 @@ const CreateProduct = (props: Props) => {
             category: productVariants.category!,
         };
 
-        console.log(productData);
-        const response = await postToApi("product", productData);
+        const response = await postToApi("product", productData, cookies.token);
+        const successResponse = response as SuccessResponse;
+        const errorResponse = response as ErrorResponse;
+
         // console.log(response);
-        if (response.data?.status == StatusCodes.Created201) {
-            show("success", "Success", response?.data?.data.msg);
+        if (successResponse.success) {
+            show("success", "Success", successResponse.data.msg);
             navigate("/admin/product", { replace: true });
+        } else {
+            show("error", "Error", errorResponse.msg);
         }
     }
 

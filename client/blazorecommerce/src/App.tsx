@@ -15,35 +15,41 @@ import DeleteProduct from "./pages/DeleteProduct.tsx";
 import React from "react";
 import { UserLocalStorageType } from "./utils/types";
 import { ScrollPanel } from "primereact/scrollpanel";
+import UserSidebarNav from "./pages/UserSidebarNav.tsx";
+import { useCookies } from "react-cookie";
 
 function App() {
     const [user, setUser] = React.useState<UserLocalStorageType | null>(null);
+    const [cookies, setCookie, removeCookie] = useCookies(["user", "token"]);
 
-    React.useEffect(() => {
-        const userRole = JSON.parse(
-            localStorage.getItem("user")!
-        ) as UserLocalStorageType;
+    // React.useEffect(() => {
+    //     const keys = Object.keys(cookies).length;
+    // }, []);
 
-        setUser(userRole);
-    }, []);
+    function checkCookies(): boolean {
+        return Object.keys(cookies).length > 0;
+    }
 
     return (
         <>
             {/* Header */}
             <main className="max-h-screen">
                 <section className="p-0">
-                    <Header />
+                    <Header user={cookies.user} />
                 </section>
 
                 <div className="flex">
-                    {user?.role == "admin" && (
-                        <section className="sidebar p-0">
+                    <section className="sidebar p-0">
+                        {!checkCookies() || cookies?.user?.role == "user" ? (
+                            <UserSidebarNav />
+                        ) : (
                             <SidebarNav />
-                        </section>
-                    )}
+                        )}
+                    </section>
 
                     <ScrollPanel className="p-0 flex-grow h-[90vh] custombar1">
                         <Routes>
+                            <Route path="" element={<Body />} />
                             <Route path="admin">
                                 <Route path="category" element={<Category />} />
                                 <Route

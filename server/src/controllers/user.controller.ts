@@ -3,6 +3,22 @@ import userService from "../services/user.service.js";
 import { StatusCodes } from "../utils/constant.js";
 import bcrypt from "bcryptjs";
 import { BadRequestError, NotFoundError } from "../errors/index.error.js";
+import { IRequestExtends } from "../utils/express-extends.js";
+import { checkRole } from "../utils/check-role.js";
+import { UnauthenticatedError } from "../errors/index.error.js";
+
+const getUsers = async (req: IRequestExtends, res: Response): Promise<void> => {
+    const user = req.user!;
+    if (checkRole(user.role, "user")) {
+        throw new UnauthenticatedError(
+            "User does not have the right permission"
+        );
+    }
+    const users = await userService.getAllAsync();
+
+    res.status(StatusCodes.Ok200).send({ user: users });
+    return;
+};
 
 const register = async (req: Request, res: Response): Promise<void> => {
     console.log(req.body);
@@ -59,4 +75,4 @@ const login = async (req: Request, res: Response): Promise<void> => {
     throw new BadRequestError("Invalid credentials");
 };
 
-export { register, login };
+export { register, login, getUsers };

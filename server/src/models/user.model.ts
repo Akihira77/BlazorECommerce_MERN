@@ -1,13 +1,28 @@
 import mongoose from "mongoose";
 import addressModel from "./address.model.js";
 
+export enum RoleType {
+    admin = "admin",
+    operator = "operator",
+    user = "user",
+}
+
 export interface IUserModel extends mongoose.Document {
     firstName: string;
     lastName: string;
     email: string;
     password: string;
-    address: mongoose.Schema.Types.ObjectId;
-    role: string;
+    // address: mongoose.Schema.Types.ObjectId;
+    role: RoleType;
+}
+
+export interface IUserRegisterDto {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    // address: mongoose.Schema.Types.ObjectId;
+    role: RoleType;
 }
 
 export interface IUserDTO {
@@ -15,7 +30,7 @@ export interface IUserDTO {
     firstName: string;
     lastName: string;
     email: string;
-    role: string;
+    role: RoleType;
 }
 
 const userSchema = new mongoose.Schema<IUserModel>({
@@ -48,14 +63,15 @@ const userSchema = new mongoose.Schema<IUserModel>({
         minlength: [6, "password must be 6 or more characters"],
         // maxlength: [15, "password cannot exceed 15 characters"],
     },
-    address: {
-        type: mongoose.Schema.Types.ObjectId,
-        // required: true,
-        ref: addressModel,
-    },
+    // address: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     // required: true,
+    //     ref: addressModel,
+    // },
     role: {
         type: String,
-        default: "non-admin",
+        enum: Object.values(RoleType),
+        default: RoleType.user,
     },
 });
 

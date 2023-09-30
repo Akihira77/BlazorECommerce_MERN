@@ -2,14 +2,16 @@ import React, { useRef, useState } from "react";
 import { Button } from "flowbite-react";
 import { postToApi } from "../../utils/axiosCommand.ts";
 import { StatusCodes } from "../../utils/constant.ts";
-import { ToastType } from "../../utils/types";
+import { ErrorResponse, SuccessResponse, ToastType } from "../../utils/types";
 import Input from "../Input.tsx";
 import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 type Props = {};
 
 const Login = (props: Props) => {
+    const [cookies, setCookie, removeCookie] = useCookies(["user", "token"]);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const toast = useRef<Toast>(null);
@@ -27,24 +29,35 @@ const Login = (props: Props) => {
     ): Promise<void> {
         e.preventDefault();
 
-        const response: any = await postToApi("user/login", {
+        const response = await postToApi("user/login", {
             email,
             password,
         });
 
-        if (response.statusCode && response.statusCode !== StatusCodes.Ok200) {
-            // notify(response.msg, "error");
-            show(response.msg, "error", "Error");
+        const successResponse = response as SuccessResponse;
+        const errorResponse = response as ErrorResponse;
+
+        if (
+            errorResponse.statusCode &&
+            errorResponse.statusCode !== StatusCodes.Ok200
+        ) {
+            show(errorResponse.msg, "error", "Error");
             return;
         }
 
-        // console.log(response);
-        localStorage.setItem("token", response.data.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.data.user));
-        if (response.data.data.user.role == "admin") {
-            navigate("/admin");
+        setCookie("user", successResponse.data.user, {
+            maxAge: 3600,
+            path: "/",
+        });
+        setCookie("token", successResponse.data.token, {
+            path: "/",
+            maxAge: 3600,
+        });
+
+        if (successResponse.data.user.role == "user") {
+            navigate("/");
         } else {
-            navigate("");
+            navigate("/admin");
         }
     }
 

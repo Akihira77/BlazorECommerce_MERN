@@ -1,11 +1,14 @@
-import userModel, { IUserDTO, IUserModel } from "../models/user.model.js";
+import userModel, {
+    IUserDTO,
+    IUserModel,
+    IUserRegisterDto,
+} from "../models/user.model.js";
 import { BaseService } from "./base.service.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { BadRequestError } from "../errors/index.error.js";
 
 class UserService extends BaseService<IUserModel> {
-    async register(request: IUserModel): Promise<IUserModel> {
+    async register(request: IUserRegisterDto): Promise<IUserModel> {
         const salt = await bcrypt.genSalt(10);
         request.password = await bcrypt.hash(request.password, salt);
 
@@ -35,7 +38,8 @@ class UserService extends BaseService<IUserModel> {
             {
                 userId: request.id,
                 userName: `${request.firstName} ${request.lastName}`,
-                role: "non-admin",
+                role: request.role,
+                email: request.email,
             },
             process.env.JWT_SECRET!,
             { expiresIn: "1d" }

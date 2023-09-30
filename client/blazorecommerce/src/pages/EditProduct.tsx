@@ -6,6 +6,7 @@ import {
 import React from "react";
 import {
     CategoryType,
+    ErrorResponse,
     ProductType,
     ProductTypesType,
     SuccessResponse,
@@ -22,6 +23,7 @@ import { StatusCodes } from "../utils/constant.ts";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProductResultType } from "../components/Product/type.ts";
 import { Dialog } from "primereact/dialog";
+import { useCookies } from "react-cookie";
 // import { Checkbox } from "primereact/checkbox";
 
 type Props = {};
@@ -37,6 +39,7 @@ const EditProduct = (props: Props) => {
     const [productTypes, setProductTypes] = React.useState<ProductTypesType[]>(
         []
     );
+    const [cookies, setCookies] = useCookies(["token"]);
 
     const show = (severity: ToastType, summary: string, detail: string) => {
         toast.current?.show({
@@ -85,12 +88,17 @@ const EditProduct = (props: Props) => {
         const response = await putToApi(
             "product",
             productData!._id!,
-            productData
+            productData,
+            cookies.token
         );
+        const successResponse = response as SuccessResponse;
+        const errorResponse = response as ErrorResponse;
         console.log(response);
-        if ((response as SuccessResponse).success) {
-            show("success", "Success", response.data?.msg);
+        if (successResponse.success) {
+            show("success", "Success", successResponse.data.msg);
             navigate("/admin/product", { replace: true });
+        } else {
+            show("error", "Error", errorResponse.msg);
         }
     }
 

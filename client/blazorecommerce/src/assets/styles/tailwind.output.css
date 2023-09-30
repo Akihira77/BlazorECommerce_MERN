@@ -642,10 +642,6 @@ body {
   position: relative;
 }
 
-.sticky {
-  position: sticky;
-}
-
 .inset-y-0 {
   top: 0px;
   bottom: 0px;
@@ -729,10 +725,6 @@ body {
 
 .top-10 {
   top: 2.5rem;
-}
-
-.top-20 {
-  top: 5rem;
 }
 
 .-z-10 {
@@ -1040,6 +1032,10 @@ body {
   height: 65px;
 }
 
+.h-\[90vh\] {
+  height: 90vh;
+}
+
 .h-auto {
   height: auto;
 }
@@ -1064,14 +1060,6 @@ body {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-\[80vh\] {
-  height: 80vh;
-}
-
-.h-\[90vh\] {
-  height: 90vh;
 }
 
 .max-h-\[90vh\] {
@@ -2029,11 +2017,6 @@ body {
   background-color: rgb(202 138 4 / var(--tw-bg-opacity));
 }
 
-.bg-slate-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(51 65 85 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
@@ -2806,10 +2789,6 @@ body {
 
 .opacity-50 {
   opacity: 0.5;
-}
-
-.opacity-100 {
-  opacity: 1;
 }
 
 .shadow {
