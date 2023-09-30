@@ -116,7 +116,7 @@ const remove = async (req: IRequestExtends, res: Response): Promise<void> => {
 const update = async (req: IRequestExtends, res: Response): Promise<void> => {
     // console.log(req.body);
     const user = req.user!;
-    if (!checkRole(user.role, "user")) {
+    if (checkRole(user.role, "user")) {
         throw new UnauthenticatedError(
             "User does not have the right permission"
         );
