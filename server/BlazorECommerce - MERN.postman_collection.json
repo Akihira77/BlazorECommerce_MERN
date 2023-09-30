@@ -1,395 +1,386 @@
 {
-	"info": {
-		"_postman_id": "d629f127-1ce1-4016-8d8e-0e6a18d2aa5d",
-		"name": "BlazorECommerce - MERN",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
-		"_exporter_id": "24368336"
-	},
-	"item": [
-		{
-			"name": "Products",
-			"item": [
-				{
-					"name": "Create",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"title\" : \"Math\",\r\n\t\"description\" : \"This is Math Book\",\r\n\t\"imageUrl\" : \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR93wP4UJQ8cBzGGl9m01DjE_7yGMRQ5E05v9yKC74S&s\",\r\n\t\"category\" : \"64fd35090bac71f54b18686e\", // Just Id\r\n\t\"variants\": [\r\n\t\t{\r\n\t\t\t\"productType\" : \"6501d00876232983c0ab2ea8\", // Just Id\r\n\t\t\t\"price\" : 15000,\r\n\t\t\t\"originalPrice\" : 175000,\r\n\t\t\t\"visible\" : true,\r\n\t\t\t\"deleted\" : false\r\n\t\t}, \r\n\t\t{}\r\n\t],\r\n\t\"featured\" : false,\r\n\t\"visible\" : true,\r\n\t\"deleted\" : false\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{API_URL}}/product"
-					},
-					"response": []
-				},
-				{
-					"name": "Get All",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "{{API_URL}}/product"
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Product",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": "{{API_URL}}/product/65104146427cb2eb3535843c"
-					},
-					"response": []
-				},
-				{
-					"name": "Update Product",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{access_token}}"
-							}
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"title\" : \"Math\",\r\n\t\"description\" : \"This is Math Book\",\r\n\t\"imageUrl\" : \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR93wP4UJQ8cBzGGl9m01DjE_7yGMRQ5E05v9yKC74S&s\",\r\n\t\"category\" : \"64fd35090bac71f54b18686e\", // Just Id\r\n\t\"variant\": [\r\n\t\t{\r\n\t\t\"productType\" : \"6501d00876232983c0ab2ea8\", // Just Id\r\n\t\t\"price\" : 15000,\r\n\t\t\"originalPrice\" : 175000,\r\n\t\t\"visible\" : true,\r\n\t\t\"deleted\" : false\r\n\t\t}\r\n\t],\r\n\t\"featured\" : false,\r\n\t\"visible\" : true,\r\n\t\"deleted\" : false\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{API_URL}}/product/65179816953129c65bd4672f"
-					},
-					"response": []
-				},
-				{
-					"name": "Get By Id",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{access_token}}"
-							}
-						},
-						"method": "GET",
-						"header": [],
-						"url": "{{API_URL}}/product/65179816953129c65bd4672f"
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Categories",
-			"item": [
-				{
-					"name": "Get All",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "{{API_URL}}/category"
-					},
-					"response": []
-				},
-				{
-					"name": "Search",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/category/search?featured=true&visible=true&deleted=false&searchText=food",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"category",
-								"search"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "food",
-									"disabled": true
-								},
-								{
-									"key": "featured",
-									"value": "true"
-								},
-								{
-									"key": "visible",
-									"value": "true"
-								},
-								{
-									"key": "deleted",
-									"value": "false"
-								},
-								{
-									"key": "searchText",
-									"value": "food"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": "{{API_URL}}/category/650702dd03a51521f9a883db"
-					},
-					"response": []
-				},
-				{
-					"name": "Update",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"name\" : \"\",\r\n\t\"url\" : \"\",\r\n\t\"visible\" : true,\r\n\t\"deleted\" : false\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{API_URL}}/category/650702dd03a51521f9a883db"
-					},
-					"response": []
-				},
-				{
-					"name": "Create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"name\" : \"Book\",\r\n\t\"url\" : \"book\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{API_URL}}/category"
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "Register",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"firstName\" : \"\",\r\n\t\"lastName\" : \"\",\r\n\t\"email\" : \"user@test.com\",\r\n\t\"password\" : \"user123\",\r\n\t\"confirmPassword\" : \"user123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{API_URL}}/user/register"
-					},
-					"response": []
-				},
-				{
-					"name": "Login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const jsonData = pm.response.json();\r",
-									"pm.globals.set(\"token\", jsonData.token);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"email\" : \"user@admin.com\",\r\n\t\"password\" : \"user123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{API_URL}}/user/login"
-					},
-					"response": []
-				},
-				{
-					"name": "Get All",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "GET",
-						"header": [],
-						"url": "{{API_URL}}/user"
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Product Type",
-			"item": [
-				{
-					"name": "Get All",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "{{API_URL}}/product-type"
-					},
-					"response": []
-				},
-				{
-					"name": "Create",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"name\" : \"\",\r\n\t\"category\" : \"\" // just Id\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{API_URL}}/product-type"
-					},
-					"response": []
-				},
-				{
-					"name": "Update",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"name\" : \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{API_URL}}/product-type/6517c67427dfb481f4f84b11"
-					},
-					"response": []
-				},
-				{
-					"name": "Delete",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": "{{API_URL}}/product-type/6517c67427dfb481f4f84b11"
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Seeding Data",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": "{{API_URL}}/seeding-data"
-			},
-			"response": []
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "API_URL",
-			"value": "localhost:7070/api/v1",
-			"type": "string"
-		}
-	]
+    "info": {
+        "_postman_id": "d629f127-1ce1-4016-8d8e-0e6a18d2aa5d",
+        "name": "BlazorECommerce - MERN",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+        "_exporter_id": "24368336"
+    },
+    "item": [
+        {
+            "name": "Products",
+            "item": [
+                {
+                    "name": "Create",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{token}}"
+                            }
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n\t\"title\" : \"Math\",\r\n\t\"description\" : \"This is Math Book\",\r\n\t\"imageUrl\" : \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR93wP4UJQ8cBzGGl9m01DjE_7yGMRQ5E05v9yKC74S&s\",\r\n\t\"category\" : \"64fd35090bac71f54b18686e\", // Just Id\r\n\t\"variants\": [\r\n\t\t{\r\n\t\t\t\"productType\" : \"6501d00876232983c0ab2ea8\", // Just Id\r\n\t\t\t\"price\" : 15000,\r\n\t\t\t\"originalPrice\" : 175000,\r\n\t\t\t\"visible\" : true,\r\n\t\t\t\"deleted\" : false\r\n\t\t}, \r\n\t\t{}\r\n\t],\r\n\t\"featured\" : false,\r\n\t\"visible\" : true,\r\n\t\"deleted\" : false\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{API_URL}}/product"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "{{API_URL}}/product"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Product",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{token}}"
+                            }
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": "{{API_URL}}/product/65104146427cb2eb3535843c"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Product",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{token}}"
+                            }
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n\t\"title\" : \"Math\",\r\n\t\"description\" : \"This is Math Book\",\r\n\t\"imageUrl\" : \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR93wP4UJQ8cBzGGl9m01DjE_7yGMRQ5E05v9yKC74S&s\",\r\n\t\"category\" : \"64fd35090bac71f54b18686e\", // Just Id\r\n\t\"variant\": [\r\n\t\t{\r\n\t\t\"productType\" : \"6501d00876232983c0ab2ea8\", // Just Id\r\n\t\t\"price\" : 15000,\r\n\t\t\"originalPrice\" : 175000,\r\n\t\t\"visible\" : true,\r\n\t\t\"deleted\" : false\r\n\t\t}\r\n\t],\r\n\t\"featured\" : false,\r\n\t\"visible\" : true,\r\n\t\"deleted\" : false\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{API_URL}}/product/65179816953129c65bd4672f"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get By Id",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{access_token}}"
+                            }
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": "{{API_URL}}/product/65179816953129c65bd4672f"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "item": [
+                {
+                    "name": "Get All",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "{{API_URL}}/category"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Search",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/category/search?featured=true&visible=true&deleted=false&searchText=food",
+                            "host": ["{{API_URL}}"],
+                            "path": ["category", "search"],
+                            "query": [
+                                {
+                                    "key": "name",
+                                    "value": "food",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "featured",
+                                    "value": "true"
+                                },
+                                {
+                                    "key": "visible",
+                                    "value": "true"
+                                },
+                                {
+                                    "key": "deleted",
+                                    "value": "false"
+                                },
+                                {
+                                    "key": "searchText",
+                                    "value": "food"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{token}}"
+                            }
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": "{{API_URL}}/category/650702dd03a51521f9a883db"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{token}}"
+                            }
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n\t\"name\" : \"\",\r\n\t\"url\" : \"\",\r\n\t\"visible\" : true,\r\n\t\"deleted\" : false\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{API_URL}}/category/650702dd03a51521f9a883db"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n\t\"name\" : \"Book\",\r\n\t\"url\" : \"book\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{API_URL}}/category"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "User",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n\t\"firstName\" : \"\",\r\n\t\"lastName\" : \"\",\r\n\t\"email\" : \"user@test.com\",\r\n\t\"password\" : \"user123\",\r\n\t\"confirmPassword\" : \"user123\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{API_URL}}/user/register"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const jsonData = pm.response.json();\r",
+                                    "pm.globals.set(\"token\", jsonData.token);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n\t\"email\" : \"user@admin.com\",\r\n\t\"password\" : \"user123\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{API_URL}}/user/login"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{token}}"
+                            }
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": "{{API_URL}}/user"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Product Type",
+            "item": [
+                {
+                    "name": "Get All",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "{{API_URL}}/product-type"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{token}}"
+                            }
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n\t\"name\" : \"\",\r\n\t\"category\" : \"\" // just Id\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{API_URL}}/product-type"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{token}}"
+                            }
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n\t\"name\" : \"\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{API_URL}}/product-type/6517c67427dfb481f4f84b11"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "token": "{{token}}"
+                            }
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": "{{API_URL}}/product-type/6517c67427dfb481f4f84b11"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Seeding Data",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "url": "{{API_URL}}/seeding-data"
+            },
+            "response": []
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [""]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [""]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "API_URL",
+            "value": "localhost:7070/api/v1",
+            "type": "string"
+        }
+    ]
 }

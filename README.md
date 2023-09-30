@@ -69,6 +69,12 @@ Tech stack yang digunakan NodeJS, ExpressJS, MongoDB, Mongoose, Dan Typescript
 Flow dari API ini adalah
 `Route/Endpoint` - `Controler` - `Service` - `Model`
 
+Saya menggunakan Flow atau Pattern ini dikarenakan
+
+-   API yang dibuat masih cukup sederhana tidak melibatkan banyak service external (API atau third party) lain.
+-   Membuat Service Layer supaya Controller tidak langsung menggunakan Model agar nantinya apabila database/data store yang digunakan berubah maka tidak terlalu sulit me-rewrite kode-kode nya, juga memperbanyak reusability code dengan memberikan pemahaman secara eksplisit service tersebut untuk apa.
+-   Yang terakhir karena flow atau pattern ini yang cukup saya kuasai saat menggunakan framework ExpressJS dan juga mongoose ODM.
+
 ## How To Run
 
 Clone project ini, lalu buat file `.env` yang berisi `PORT`, `MONGO_URI`, dan `JWT_SECRET`.
